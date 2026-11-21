@@ -146,7 +146,7 @@ function ExamEntry() {
 
   async function viewOriginal(path: string) {
     const { data, error } = await supabase.storage.from("mark-sources").createSignedUrl(path, 300);
-    if (error || !data) return toast.error(t("common.error"));
+    if (error || !data) { toast.error(t("common.error")); return; }
     window.open(data.signedUrl, "_blank", "noopener");
   }
 

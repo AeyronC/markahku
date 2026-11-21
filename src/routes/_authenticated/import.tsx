@@ -113,11 +113,11 @@ function ImportWizard() {
   const steps = [t("imp.s1"), t("imp.s2"), t("imp.s3"), t("imp.s4"), t("imp.s5")];
 
   async function onFile(f: File) {
-    if (f.size > MAX_BYTES) return toast.error(t("imp.tooBig"));
+    if (f.size > MAX_BYTES) { toast.error(t("imp.tooBig")); return; }
     const name = f.name.toLowerCase();
     const isSheet = name.endsWith(".xlsx") || name.endsWith(".xls") || name.endsWith(".csv");
     const isImage = IMAGE_TYPES.includes(f.type);
-    if (!isSheet && !isImage) return toast.error(t("imp.badType"));
+    if (!isSheet && !isImage) { toast.error(t("imp.badType")); return; }
     setFile(f);
     if (isSheet) {
       setBusy("read");
@@ -208,7 +208,7 @@ function ImportWizard() {
   async function mappingNext() {
     if (!sheet || !mapping) return;
     const parsed = sheetToRows(sheet.rows, mapping, form, defaultExam);
-    if (!parsed.length) return toast.error(t("imp.nothing"));
+    if (!parsed.length) { toast.error(t("imp.nothing")); return; }
     setBusy("read");
     try {
       await buildRows(parsed);

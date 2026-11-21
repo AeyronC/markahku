@@ -238,7 +238,7 @@ const planSchema = {
 export const runAnalyst = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => summaryInput.parse(input))
-  .handler(async ({ data, context }): Promise<AiResult<{ id: string; created_at: string; payload: unknown }>> => {
+  .handler(async ({ data, context }): Promise<AiResult<{ id: string; created_at: string }>> => {
     const cap = Number(process.env["AI_DAILY_CAP"] ?? 30) || 30;
     const { data: allowed, error } = await context.supabase.rpc("consume_ai_call", { _kind: "ai", _cap: cap });
     if (error) {
@@ -268,7 +268,7 @@ export const runAnalyst = createServerFn({ method: "POST" })
       const { data: row, error: insErr } = await context.supabase
         .from("ai_insights")
         .insert({ user_id: context.userId, kind: data.kind, form: data.form, language: data.language, payload: payload as never })
-        .select("id, created_at, payload")
+        .select("id, created_at")
         .single();
       if (insErr) throw insErr;
       return { ok: true, data: row };
