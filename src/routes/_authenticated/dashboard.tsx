@@ -113,11 +113,11 @@ function Dashboard() {
         </Card>
       )}
 
-      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+      <div className="mb-2 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         <Stat label={t("common.total")} value={sum.counted ? sum.total : "—"} />
         <Stat label={t("common.average")} value={formatAverage(sum.average)} />
         <Stat label={t("common.cgpa")} value={formatCgpa(sum.cgpa)} />
-        <Stat label={t("common.counted")} value={sum.counted} hint={t("dash.countedOf", { c: sum.counted, p: sum.pending })} />
+        <Stat label={t("common.counted")} value={sum.counted} />
         <Stat
           label={t("common.rank")}
           value={session?.rank_position ? `${session.rank_position}/${session.rank_total ?? "?"}` : "—"}
@@ -130,6 +130,8 @@ function Dashboard() {
           tone={deltaTone(change.average)}
         />
       </div>
+
+      <p className="mb-6 text-sm text-muted-foreground">{t("dash.countedOf", { c: sum.counted, p: sum.pending })}</p>
 
       <div className="grid gap-6 lg:grid-cols-12">
         <Card className="lg:col-span-7">
