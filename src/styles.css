@@ -232,16 +232,16 @@
 
 @utility glass {
   background: linear-gradient(145deg, color-mix(in oklab, var(--glass-bg) 92%, white 8%), var(--glass-bg));
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(135%);
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-glass);
 }
 
 @utility glass-strong {
   background: linear-gradient(145deg, color-mix(in oklab, var(--glass-strong) 94%, white 6%), var(--glass-strong));
-  backdrop-filter: blur(28px) saturate(165%);
-  -webkit-backdrop-filter: blur(28px) saturate(165%);
+  backdrop-filter: blur(18px) saturate(145%);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-glass);
 }
@@ -310,7 +310,7 @@
 }
 
 
-/* Slow moving light gives translucent surfaces a soft liquid-glass feel. */
+/* One low-cost ambient motion layer keeps the glass feeling fluid. */
 body {
   position: relative;
   isolation: isolate;
@@ -319,74 +319,41 @@ body {
 body::before {
   content: "";
   position: fixed;
-  inset: -18%;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 28% 32%, color-mix(in oklab, var(--primary) 20%, transparent) 0%, transparent 48%),
-    radial-gradient(ellipse at 72% 58%, color-mix(in oklab, var(--primary-glow) 16%, transparent) 0%, transparent 46%);
-  filter: blur(72px) saturate(125%);
-  opacity: 0.48;
-  transform: translate3d(-1.5%, -1%, 0) scale(1.04);
-  animation: water-ambient-drift 30s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+    radial-gradient(ellipse at 28% 32%, color-mix(in oklab, var(--primary) 18%, transparent) 0%, transparent 48%),
+    radial-gradient(ellipse at 72% 58%, color-mix(in oklab, var(--primary-glow) 14%, transparent) 0%, transparent 46%);
+  opacity: 0.32;
+  transform: translate3d(-0.35%, -0.35%, 0);
+  animation: water-ambient-drift 36s ease-in-out infinite alternate;
   will-change: transform;
 }
 
 html.light body::before {
-  opacity: 0.28;
-}
-
-.glass,
-.glass-strong {
-  position: relative;
-  isolation: isolate;
-}
-
-.glass::before,
-.glass-strong::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  border-radius: inherit;
-  background: linear-gradient(
-    108deg,
-    transparent 27%,
-    color-mix(in oklab, white 0%, transparent) 38%,
-    color-mix(in oklab, white 8%, transparent) 48%,
-    color-mix(in oklab, var(--primary) 8%, transparent) 53%,
-    transparent 64%
-  );
-  opacity: 0.52;
-  transform: translate3d(-18%, 0, 0) skewX(-8deg);
-  animation: glass-water-sheen 18s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+  opacity: 0.2;
 }
 
 @keyframes water-ambient-drift {
-  0% {
-    transform: translate3d(-2%, -1.5%, 0) scale(1.02);
+  from {
+    transform: translate3d(-0.35%, -0.35%, 0);
   }
-  100% {
-    transform: translate3d(2%, 1.5%, 0) scale(1.08);
+  to {
+    transform: translate3d(0.35%, 0.35%, 0);
   }
 }
 
-@keyframes glass-water-sheen {
-  0% {
-    transform: translate3d(-24%, 0, 0) skewX(-8deg);
-    opacity: 0.28;
-  }
-  100% {
-    transform: translate3d(24%, 0, 0) skewX(-8deg);
-    opacity: 0.62;
+@media (max-width: 767px) {
+  .glass,
+  .glass-strong {
+    backdrop-filter: blur(8px) saturate(125%);
+    -webkit-backdrop-filter: blur(8px) saturate(125%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body::before,
-  .glass::before,
-  .glass-strong::before {
+  body::before {
     animation: none;
   }
 }
