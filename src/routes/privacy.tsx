@@ -24,8 +24,8 @@ const CONTENT = {
     items: [
       ["Apa yang disimpan", "Nama paparan, sekolah dan kelas (jika anda isi), Tingkatan, subjek, markah, kedudukan, sasaran dan hasil AI anda."],
       ["Siapa boleh lihat", "Hanya anda. Tiada guru, ibu bapa, rakan atau pentadbir boleh melihat markah anda. Tiada pautan kongsi atau papan pendahulu."],
-      ["Fail asal", "Gambar, tangkapan skrin dan fail Excel/CSV yang anda import disimpan secara peribadi supaya anda boleh lihat semula. Hanya anda boleh membukanya."],
-      ["AI", "Apabila anda minta analisis, pelan belajar atau bacaan gambar, hanya markah, subjek, sasaran dan Tingkatan dihantar ke penyedia AI. Nama, e-mel dan sekolah anda tidak dihantar. Gambar kad laporan dihantar untuk dibaca, jadi elakkan gambar yang menunjukkan maklumat peribadi lain."],
+      ["Fail asal", "Gambar, tangkapan skrin, PDF dan fail Excel/CSV yang anda import disimpan secara peribadi supaya anda boleh lihat semula. Hanya anda boleh membukanya."],
+      ["AI", "Apabila anda minta analisis, pelan belajar atau bacaan gambar/PDF, hanya markah, subjek, sasaran dan Tingkatan dihantar ke penyedia AI. Nama, e-mel dan sekolah anda tidak dihantar. Gambar kad laporan dan halaman PDF yang dirender dihantar untuk dibaca, jadi elakkan dokumen yang menunjukkan maklumat peribadi lain."],
       ["Tiada penjejak", "Tiada iklan, analitik atau penjejak pihak ketiga."],
       ["Padam semuanya", "Pergi ke Tetapan → Padam akaun dan semua data saya. Semua markah, fail dan akaun anda dipadam serta-merta. Anda juga boleh muat turun semua data anda dahulu."],
       ["Untuk pelajar bawah 18 tahun", "Bincang dengan ibu bapa atau guru sebelum menggunakan aplikasi ini. Akaun Google untuk bawah umur tertakluk kepada peraturan Google dan PDPA Malaysia."],
@@ -37,8 +37,8 @@ const CONTENT = {
     items: [
       ["What's stored", "Your display name, school and class (if you fill them in), Form, subjects, marks, ranks, goals and AI results."],
       ["Who can see it", "Only you. No teachers, parents, friends or admins can see your marks. There are no share links or leaderboards."],
-      ["Original files", "Photos, screenshots and Excel/CSV files you import are kept privately so you can look at them again. Only you can open them."],
-      ["AI", "When you ask for an analysis, a study plan or a photo read, only your marks, subjects, goals and Form go to the AI provider. Your name, email and school are never sent. Report card photos are sent to be read, so avoid photos that show other personal details."],
+      ["Original files", "Photos, screenshots, PDFs and Excel/CSV files you import are kept privately so you can look at them again. Only you can open them."],
+      ["AI", "When you ask for an analysis, a study plan or an image/PDF read, only your marks, subjects, goals and Form go to the AI provider. Your name, email and school are never sent. Report card photos and rendered PDF pages are sent to be read, so avoid documents that show other personal details."],
       ["No trackers", "No ads, analytics or third-party trackers."],
       ["Delete everything", "Go to Settings → Delete my account and all data. All your marks, files and your account are removed right away. You can download all your data first."],
       ["If you're under 18", "Talk to a parent or teacher before using the app. Google accounts for minors follow Google's rules and Malaysia's PDPA."],
