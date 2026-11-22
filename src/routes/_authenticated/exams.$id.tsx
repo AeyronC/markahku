@@ -183,10 +183,10 @@ function ExamEntry() {
         sub={t("exams.liveHint")}
         actions={
           <>
-            <Button variant="outline" onClick={() => exportExamPdf(book, session.form, session.exam, lang)}>
+            <Button variant="outline" className="h-11" onClick={() => exportExamPdf(book, session.form, session.exam, lang)}>
               <Download /> {t("common.exportPdf")}
             </Button>
-            <Button variant="hero" onClick={save} disabled={saving || invalid}>
+            <Button variant="hero" className="h-11" onClick={save} disabled={saving || invalid}>
               {saving && <Loader2 className="animate-spin" />}
               {saving ? t("common.saving") : t("common.save")}
             </Button>
@@ -220,8 +220,8 @@ function ExamEntry() {
               const subj = subjects.find((s) => s.id === p.subjectId);
               const m = p.entry ? effectiveMark(p.entry) : null;
               return (
-                <div key={p.subjectId} className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 px-4 py-3 md:grid-cols-[1fr_110px_160px_70px_70px]">
-                  <div className={cn("font-medium", !subj?.is_active && "text-muted-foreground")}>{subjectName(subj, lang)}</div>
+                <div key={p.subjectId} className="grid grid-cols-[minmax(0,1fr)_5rem] items-center gap-x-3 gap-y-2 px-3 py-3 md:grid-cols-[1fr_110px_160px_70px_70px] md:px-4">
+                  <div className={cn("min-w-0 break-words font-medium", !subj?.is_active && "text-muted-foreground")}>{subjectName(subj, lang)}</div>
                   <div className="flex items-center gap-2 md:contents">
                     <Input
                       inputMode="numeric"
@@ -230,17 +230,17 @@ function ExamEntry() {
                       disabled={p.status === "absent" || p.status === "exempted"}
                       onChange={(e) => onMark(i, e.target.value)}
                       placeholder="—"
-                      className={cn("w-20 text-center font-mono tabular md:w-full", !p.valid && "border-destructive")}
+                      className={cn("h-11 w-20 text-center font-mono tabular md:w-full", !p.valid && "border-destructive")}
                     />
                   </div>
                   <div className="col-span-2 flex items-center gap-3 md:col-span-1 md:contents">
                     <Select value={p.status} onValueChange={(v) => onStatus(i, v as MarkStatus)}>
-                      <SelectTrigger className="h-9 flex-1 md:w-full" aria-label={t("common.status")}>
+                      <SelectTrigger className="h-11 flex-1 md:w-full" aria-label={t("common.status")}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         {MARK_STATUSES.map((s) => (
-                          <SelectItem key={s} value={s}>
+                          <SelectItem key={s} value={s} className="min-h-11">
                             {t(`status.${s}`)}
                           </SelectItem>
                         ))}

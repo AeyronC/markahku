@@ -65,6 +65,14 @@ function Analyst() {
   });
 
   const latest = (kind: "analysis" | "study_plan") => insights.data?.find((i) => i.kind === kind);
+  const formSessionIds = new Set(book?.sessions.filter((s) => s.form === form).map((s) => s.id) ?? []);
+  const dataUsedAt = book?.marks.reduce<string | null>((latestDate, mark) => {
+    if (!formSessionIds.has(mark.session_id) || !mark.updated_at) return latestDate;
+    return !latestDate || Date.parse(mark.updated_at) > Date.parse(latestDate) ? mark.updated_at : latestDate;
+  }, null) ?? null;
+  const marksChangedSince = (item: { created_at: string }) => !!book?.marks.some(
+    (mark) => formSessionIds.has(mark.session_id) && !!mark.updated_at && Date.parse(mark.updated_at) > Date.parse(item.created_at),
+  );
   const hasData = book ? buildAnalystSummary(book, form, lang).exams.some((e) => e.counted > 0) : false;
 
   async function generate(kind: "analysis" | "study_plan") {
@@ -86,6 +94,7 @@ function Analyst() {
   }
 
   const fmtDate = (d: string) => new Date(d).toLocaleString(lang === "ms" ? "ms-MY" : "en-MY", { dateStyle: "medium", timeStyle: "short" });
+  const fmtDataDate = (d: string) => new Date(d).toLocaleDateString(lang === "ms" ? "ms-MY" : "en-MY", { dateStyle: "medium" });
 
   return (
     <>
@@ -108,11 +117,12 @@ function Analyst() {
             return (
               <TabsContent key={kind} value={kind} className="mt-4">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <span className="text-sm text-muted-foreground">{item ? t("ai.generatedOn", { d: fmtDate(item.created_at) }) : t("ai.empty")}</span>
-                  <Button variant="hero" onClick={() => generate(kind)} disabled={!!busy}>
+                  <span className="text-sm text-muted-foreground">{item ? <>{t("ai.generatedOn", { d: fmtDate(item.created_at) })}{dataUsedAt && <span> · {lang === "ms" ? "Data hingga" : "Data through"} {fmtDataDate(dataUsedAt)}</span>}</> : t("ai.empty")}</span>
+                  <Button variant="hero" onClick={() => generate(kind)} disabled={!!busy || (!!item && !marksChangedSince(item))}>
                     {busy === kind ? <Loader2 className="animate-spin" /> : item ? <RefreshCw /> : <Sparkles />}
                     {busy === kind ? t("ai.generating") : item ? t("ai.regenerate") : t("ai.generate")}
                   </Button>
+                  {item && !marksChangedSince(item) && <p className="w-full text-right text-xs text-muted-foreground">{lang === "ms" ? "Markah belum berubah sejak keputusan terakhir." : "Marks have not changed since the last result."}</p>}
                 </div>
                 {busy === kind && !item ? (
                   <Skeleton className="h-64 rounded-2xl" />
