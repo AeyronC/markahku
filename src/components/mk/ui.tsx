@@ -31,9 +31,9 @@ export function GradeBadge({ mark, letter, className }: { mark?: number | null; 
 
 export function PageHeader({ title, sub, actions }: { title: string; sub?: string; actions?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+    <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-end md:justify-between">
       <div>
-        <h1 className="text-2xl font-semibold md:text-3xl">{title}</h1>
+        <h1 className="text-[1.75rem] font-semibold leading-tight tracking-tight md:text-3xl">{title}</h1>
         {sub && <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{sub}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -79,7 +79,7 @@ export function ExamSelect({ value, onChange, className }: { value: ExamType; on
 
 export function Stat({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "up" | "down" | "flat" }) {
   return (
-    <div className="glass rounded-2xl p-4">
+    <div className="glass group relative overflow-hidden rounded-[1.4rem] p-4 transition-transform duration-300 hover:-translate-y-0.5 md:p-5">
       <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="mt-1.5 font-display text-2xl font-semibold tabular">{value}</div>
       {hint && (
@@ -113,7 +113,7 @@ export function LangToggle({ onChange }: { onChange?: (l: "ms" | "en") => void }
   const { lang, setLang } = usePrefs();
   const t = useT();
   return (
-    <div className="glass inline-flex rounded-lg p-0.5 text-xs font-semibold" role="group" aria-label={t("common.language")}>
+    <div className="glass inline-flex min-h-12 rounded-full p-1 text-xs font-semibold" role="group" aria-label={t("common.language")}>
       {(["ms", "en"] as const).map((l) => (
         <button
           key={l}
@@ -123,8 +123,8 @@ export function LangToggle({ onChange }: { onChange?: (l: "ms" | "en") => void }
             onChange?.(l);
           }}
           className={cn(
-            "min-h-11 min-w-11 rounded-md px-2.5 py-1 transition-colors",
-            lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+            "min-h-10 min-w-12 rounded-full px-3 py-1 transition-all",
+            lang === l ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
           )}
           aria-pressed={lang === l}
         >

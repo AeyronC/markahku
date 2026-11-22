@@ -103,10 +103,10 @@
   --input: oklch(1 0 0 / 14%);
   --ring: oklch(0.82 0.13 198);
 
-  --glass-bg: oklch(1 0 0 / 5.5%);
-  --glass-strong: oklch(0.22 0.05 262 / 80%);
-  --glass-border: oklch(1 0 0 / 11%);
-  --shadow-glass: 0 1px 0 0 oklch(1 0 0 / 6%) inset, 0 18px 40px -18px oklch(0.05 0.03 262 / 70%);
+  --glass-bg: oklch(0.28 0.045 260 / 68%);
+  --glass-strong: oklch(0.22 0.05 262 / 88%);
+  --glass-border: oklch(1 0 0 / 16%);
+  --shadow-glass: 0 1px 0 0 oklch(1 0 0 / 12%) inset, 0 20px 48px -22px oklch(0.05 0.03 262 / 76%);
   --shadow-glow: 0 10px 30px -10px color-mix(in oklab, var(--primary) 55%, transparent);
   --gradient-app:
     radial-gradient(900px 600px at 10% -10%, oklch(0.45 0.12 220 / 35%), transparent 60%),
@@ -169,10 +169,10 @@
   --input: oklch(0.24 0.055 262 / 16%);
   --ring: oklch(0.56 0.12 215);
 
-  --glass-bg: oklch(1 0 0 / 62%);
-  --glass-strong: oklch(1 0 0 / 88%);
-  --glass-border: oklch(1 0 0 / 80%);
-  --shadow-glass: 0 1px 0 0 oklch(1 0 0 / 70%) inset, 0 18px 40px -22px oklch(0.35 0.08 250 / 35%);
+  --glass-bg: oklch(1 0 0 / 74%);
+  --glass-strong: oklch(0.99 0.006 245 / 90%);
+  --glass-border: oklch(1 0 0 / 88%);
+  --shadow-glass: 0 1px 0 0 oklch(1 0 0 / 88%) inset, 0 20px 48px -24px oklch(0.35 0.08 250 / 40%);
   --gradient-app:
     radial-gradient(900px 600px at 10% -10%, oklch(0.85 0.08 220 / 70%), transparent 60%),
     radial-gradient(800px 500px at 100% 0%, oklch(0.9 0.07 175 / 60%), transparent 60%),
@@ -204,12 +204,18 @@
   }
   body {
     min-height: 100vh;
+    min-height: 100svh;
     background: var(--gradient-app);
     background-attachment: fixed;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :where(button, a, input, select, textarea) {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   h1,
   h2,
@@ -225,7 +231,7 @@
 }
 
 @utility glass {
-  background: var(--glass-bg);
+  background: linear-gradient(145deg, color-mix(in oklab, var(--glass-bg) 92%, white 8%), var(--glass-bg));
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   border: 1px solid var(--glass-border);
@@ -233,9 +239,9 @@
 }
 
 @utility glass-strong {
-  background: var(--glass-strong);
-  backdrop-filter: blur(22px) saturate(150%);
-  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  background: linear-gradient(145deg, color-mix(in oklab, var(--glass-strong) 94%, white 6%), var(--glass-strong));
+  backdrop-filter: blur(28px) saturate(165%);
+  -webkit-backdrop-filter: blur(28px) saturate(165%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-glass);
 }
@@ -282,5 +288,23 @@
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* iPhone-style browser chrome and touch surfaces */
+@media (max-width: 767px) {
+  body {
+    background-attachment: scroll;
+  }
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    scroll-padding-bottom: calc(6rem + env(safe-area-inset-bottom));
   }
 }
