@@ -141,7 +141,7 @@ const en = {
   "imp.s5": "Confirm",
   "imp.defaultExam": "Exam (used when the file doesn't say)",
   "imp.drop": "Choose a file",
-  "imp.types": "Excel (.xlsx), CSV, or a photo/screenshot (JPG, PNG, WEBP) up to 5 MB",
+  "imp.types": "Excel (.xlsx), CSV, PDF, or a photo/screenshot (JPG, PNG, WEBP) up to 5 MB",
   "imp.reading": "Reading your report card…",
   "imp.mapCols": "Match the columns",
   "imp.colSubject": "Subject column",
@@ -171,6 +171,10 @@ const en = {
   "imp.badType": "That file type isn't supported.",
   "imp.nothing": "No marks were found in that file.",
   "imp.capReached": "You've used today's photo reads. Come back tomorrow, or type the marks in.",
+  "imp.template": "Muat turun templat CSV",
+  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka dan cuba lagi."
+  "imp.template": "Download CSV template",
+  "imp.unreadable": "We could not read that file. Check that it opens correctly and try again."
 
   "yr.title": "Yearly view",
   "yr.sub": "All three exams of a Form, combined.",
@@ -384,7 +388,7 @@ const ms: Record<DictKey, string> = {
   "imp.s5": "Sahkan",
   "imp.defaultExam": "Peperiksaan (jika fail tidak menyatakan)",
   "imp.drop": "Pilih fail",
-  "imp.types": "Excel (.xlsx), CSV, atau gambar/tangkapan skrin (JPG, PNG, WEBP) sehingga 5 MB",
+  "imp.types": "Excel (.xlsx), CSV, PDF, atau gambar/tangkapan skrin (JPG, PNG, WEBP) sehingga 5 MB",
   "imp.reading": "Membaca kad laporan anda…",
   "imp.mapCols": "Padankan lajur",
   "imp.colSubject": "Lajur subjek",
@@ -414,6 +418,8 @@ const ms: Record<DictKey, string> = {
   "imp.badType": "Jenis fail itu tidak disokong.",
   "imp.nothing": "Tiada markah dijumpai dalam fail itu.",
   "imp.capReached": "Had bacaan gambar hari ini sudah habis. Cuba esok, atau taip markah sendiri.",
+  "imp.template": "Muat turun templat CSV",
+  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka dan cuba lagi."
 
   "yr.title": "Paparan tahunan",
   "yr.sub": "Ketiga-tiga peperiksaan satu Tingkatan, digabungkan.",
