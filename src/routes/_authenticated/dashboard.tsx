@@ -148,7 +148,7 @@ function Dashboard() {
 
         <div className="space-y-6 lg:col-span-5">
           <Card>
-            <CardHeader className="gap-3">
+            <CardHeader className="gap-3 space-y-0">
               <CardTitle>{t("dash.trend")}</CardTitle>
               <div className="grid w-full gap-2">
                 <Tabs value={metric} onValueChange={(v) => setMetric(v as "average" | "cgpa")}>
