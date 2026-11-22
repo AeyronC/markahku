@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { CheckCircle2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -67,17 +68,23 @@ export function GoalBars({ book, form, compact }: { book: Gradebook; form: numbe
         const subj = book.subjects.find((s) => s.id === g.user_subject_id);
         const latest = latestCountedMark(book, form, g.user_subject_id!);
         const p = subjectGoalProgress(latest, g.target_grade as GoalLetter);
+        const name = subjectName(subj, lang);
+        const gapNote = p.gap != null
+          ? lang === "ms"
+            ? `${Math.ceil(p.gap)} markah lagi untuk mencapai gred ${g.target_grade} dalam ${name}`
+            : `${Math.ceil(p.gap)} marks to reach ${g.target_grade} in ${name}`
+          : t("goals.noMark");
         return (
           <Bar
             key={g.id}
-            label={subjectName(subj, lang)}
+            label={name}
             value={
               <span className="flex items-center gap-1.5">
                 <GradeBadge mark={latest} /> → <GradeBadge letter={g.target_grade as GoalLetter} />
               </span>
             }
             progress={p.progress}
-            note={p.met ? t("goals.met") : p.gap != null ? t("goals.toGo", { n: p.gap }) : t("goals.noMark")}
+            note={p.met ? t("goals.met") : gapNote}
             met={p.met}
           />
         );
@@ -94,7 +101,7 @@ function Bar({ label, value, progress, note, met }: { label: string; value: Reac
         <span className="shrink-0 font-mono text-xs tabular text-muted-foreground">{value}</span>
       </div>
       <Progress value={progress * 100} className="h-2" />
-      <div className={met ? "mt-1 text-xs text-success" : "mt-1 text-xs text-muted-foreground"}>{note}</div>
+      <div className={met ? "mt-1 flex items-center gap-1 text-xs text-success" : "mt-1 text-xs text-muted-foreground"}>{met && <CheckCircle2 aria-hidden="true" className="size-3.5 shrink-0" />}<span>{note}</span></div>
     </div>
   );
 }
