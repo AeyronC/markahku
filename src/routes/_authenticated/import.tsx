@@ -146,8 +146,7 @@ function ImportWizard() {
     setBusy("ocr");
     try {
       const dataUrl = await downscale(f);
-      const names = book ? subjectsForForm(book, form, true).map((s) => subjectName(s, lang)) : [];
-      const res = await ocr({ data: { image: dataUrl, form, subjects: names } });
+      const res = await ocr({ data: { image: dataUrl, form } });
       if (!res.ok) {
         toast.error(res.code === "cap" ? t("imp.capReached") : t("common.error"));
         setStep(2);
