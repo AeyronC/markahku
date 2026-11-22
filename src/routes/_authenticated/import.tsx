@@ -67,7 +67,8 @@ const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 async function renderPdf(file: File): Promise<string[]> {
   const pdfjs = await import("pdfjs-dist");
   pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
-  const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  const loadingTask = pdfjs.getDocument({ data: await file.arrayBuffer() });
+  const pdf = await loadingTask.promise;
   const images: string[] = [];
   try {
     if (pdf.numPages > 20) throw new Error("PDF has too many pages");
@@ -81,13 +82,14 @@ async function renderPdf(file: File): Promise<string[]> {
       canvas.height = Math.round(viewport.height);
       const context = canvas.getContext("2d");
       if (!context) throw new Error("Unable to render PDF");
-      await page.render({ canvasContext: context, viewport }).promise;
+      await page.render({ canvasContext: context, viewport, canvas }).promise;
       images.push(canvas.toDataURL("image/jpeg", 0.8));
       canvas.width = 0;
       canvas.height = 0;
     }
   } finally {
-    await pdf.destroy();
+    await pdf.cleanup();
+    await loadingTask.destroy();
   }
   if (images.reduce((total, image) => total + image.length, 0) > 7_200_000) {
     throw new Error("Rendered PDF is too large");

@@ -165,7 +165,7 @@ function QuickAdd() {
                     {t("grade.letter")} · {t("grade.points")}
                   </span>
                   <span className="flex items-center gap-3 font-mono tabular">
-                    <GradeBadge mark={m} />
+                    <GradeBadge mark={m} form={form} />
                     {m != null ? cgpaPoints(m).toFixed(2) : "—"}
                   </span>
                 </div>

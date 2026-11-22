@@ -5,8 +5,10 @@
 
 export type ExamType = "sumatif_1" | "sumatif_2" | "uasa";
 export type MarkStatus = "completed" | "pending" | "exempted" | "absent";
-export type Letter = "A" | "B" | "C" | "D" | "E" | "F";
-export type GoalLetter = Exclude<Letter, "F">;
+export type UasaLetter = "A" | "B" | "C" | "D" | "E" | "F";
+export type SpmLetter = "A+" | "A" | "A-" | "B+" | "B" | "C+" | "C" | "D" | "E" | "G";
+export type Letter = UasaLetter | SpmLetter;
+export type GoalLetter = "A" | "B" | "C" | "D" | "E";
 
 export const EXAM_TYPES: ExamType[] = ["sumatif_1", "sumatif_2", "uasa"];
 export const FORMS = [1, 2, 3, 4, 5] as const;
@@ -19,6 +21,30 @@ export interface LetterBand {
   ms: string;
   en: string;
 }
+
+/** Form 1–3 UASA standard scale (KSSM Menengah Rendah) */
+export const UASA_LETTER_BANDS: LetterBand[] = [
+  { letter: "A", min: 85, max: 100, ms: "Cemerlang", en: "Excellent" },
+  { letter: "B", min: 70, max: 84, ms: "Kepujian", en: "Commendable" },
+  { letter: "C", min: 60, max: 69, ms: "Baik", en: "Good" },
+  { letter: "D", min: 50, max: 59, ms: "Memuaskan", en: "Satisfactory" },
+  { letter: "E", min: 40, max: 49, ms: "Mencapai Tahap Minimum", en: "Minimum Level Achieved" },
+  { letter: "F", min: 0, max: 39, ms: "Belum Mencapai Tahap Minimum", en: "Minimum Level Not Achieved" },
+];
+
+/** Form 4–5 SPM 10-tier scale (KSSM Menengah Atas) */
+export const SPM_LETTER_BANDS: LetterBand[] = [
+  { letter: "A+", min: 90, max: 100, ms: "Cemerlang Tertinggi", en: "Super Distinction" },
+  { letter: "A", min: 80, max: 89, ms: "Cemerlang Tinggi", en: "High Distinction" },
+  { letter: "A-", min: 70, max: 79, ms: "Cemerlang", en: "Distinction" },
+  { letter: "B+", min: 65, max: 69, ms: "Kepujian Tertinggi", en: "Super Credit" },
+  { letter: "B", min: 60, max: 64, ms: "Kepujian Tinggi", en: "High Credit" },
+  { letter: "C+", min: 55, max: 59, ms: "Kepujian Atas", en: "Upper Credit" },
+  { letter: "C", min: 50, max: 54, ms: "Kepujian", en: "Credit" },
+  { letter: "D", min: 45, max: 49, ms: "Lulus Atas", en: "Upper Pass" },
+  { letter: "E", min: 40, max: 44, ms: "Lulus", en: "Pass" },
+  { letter: "G", min: 0, max: 39, ms: "Gagal", en: "Fail" },
+];
 
 export const LETTER_BANDS: LetterBand[] = [
   { letter: "A", min: 82, max: 100, ms: "Cemerlang", en: "Excellent" },
@@ -71,13 +97,20 @@ export function isValidMark(n: number) {
   return Number.isInteger(n) && n >= 0 && n <= 100;
 }
 
-export function letterBand(mark: number): LetterBand {
-  const m = Math.round(mark);
-  return LETTER_BANDS.find((b) => m >= b.min && m <= b.max) ?? LETTER_BANDS[LETTER_BANDS.length - 1]!;
+export function letterBandsForForm(form?: number): LetterBand[] {
+  if (form === 4 || form === 5) return SPM_LETTER_BANDS;
+  if (form === 1 || form === 2 || form === 3) return UASA_LETTER_BANDS;
+  return LETTER_BANDS;
 }
 
-export function letterGrade(mark: number): Letter {
-  return letterBand(mark).letter;
+export function letterBand(mark: number, form?: number): LetterBand {
+  const m = Math.round(mark);
+  const bands = letterBandsForForm(form);
+  return bands.find((b) => m >= b.min && m <= b.max) ?? bands[bands.length - 1]!;
+}
+
+export function letterGrade(mark: number, form?: number): Letter {
+  return letterBand(mark, form).letter;
 }
 
 export function pointBand(mark: number): PointBand {
@@ -215,13 +248,14 @@ export function yearlySummary(perExam: ExamSummary[]) {
   };
 }
 
-export function letterMin(letter: Letter) {
-  return LETTER_BANDS.find((b) => b.letter === letter)!.min;
+export function letterMin(letter: Letter, form?: number) {
+  const bands = form ? letterBandsForForm(form) : [...LETTER_BANDS, ...SPM_LETTER_BANDS, ...UASA_LETTER_BANDS];
+  return bands.find((b) => b.letter === letter)?.min ?? 0;
 }
 
 /** Subject goal: latest counted mark vs the lower bound of the target band. */
-export function subjectGoalProgress(latest: number | null, target: GoalLetter) {
-  const min = letterMin(target);
+export function subjectGoalProgress(latest: number | null, target: GoalLetter, form?: number) {
+  const min = letterMin(target, form);
   if (latest == null) return { progress: 0, gap: null as number | null, met: false };
   return {
     progress: Math.min(1, latest / min),
@@ -240,12 +274,13 @@ export function examGoalProgress(current: number | null, target: number) {
   };
 }
 
-/** Marks needed to reach the next letter grade (null when already A). */
-export function nextLetterBoundary(mark: number) {
-  const band = letterBand(mark);
-  const i = LETTER_BANDS.indexOf(band);
+/** Marks needed to reach the next letter grade (null when already highest grade). */
+export function nextLetterBoundary(mark: number, form?: number) {
+  const bands = letterBandsForForm(form);
+  const band = letterBand(mark, form);
+  const i = bands.indexOf(band);
   if (i <= 0) return null;
-  const next = LETTER_BANDS[i - 1]!;
+  const next = bands[i - 1]!;
   return { letter: next.letter, marksNeeded: next.min - mark };
 }
 

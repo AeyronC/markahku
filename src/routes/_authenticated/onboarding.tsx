@@ -205,6 +205,47 @@ function Onboarding() {
                 </div>
               ))}
             </div>
+            {form >= 4 && (
+              <div className="space-y-2 rounded-xl bg-muted/40 p-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {lang === "ms" ? "Cadangan Elektif SPM" : "Suggested SPM Electives"}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    "Matematik Tambahan",
+                    "Fizik",
+                    "Kimia",
+                    "Biologi",
+                    "Prinsip Perakaunan",
+                    "Perniagaan",
+                    "Ekonomi",
+                    "Tasawwur Islam",
+                    "Sains Komputer",
+                  ].map((name) => {
+                    const isAdded = custom.includes(name);
+                    return (
+                      <button
+                        key={name}
+                        type="button"
+                        disabled={isAdded}
+                        onClick={() => {
+                          if (!custom.includes(name)) setCustom([...custom, name]);
+                        }}
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs transition-colors",
+                          isAdded
+                            ? "bg-primary/20 text-primary opacity-60 cursor-default"
+                            : "bg-muted text-foreground hover:bg-primary/15 hover:text-primary",
+                        )}
+                      >
+                        {isAdded ? <Check className="size-3" /> : <Plus className="size-3" />}
+                        {name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             <form
               className="flex gap-2"
               onSubmit={(e) => {

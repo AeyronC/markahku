@@ -1,7 +1,7 @@
 import { CircleHelp } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { usePrefs, useT } from "@/lib/i18n";
-import { EXAM_TYPES, cgpaPoints, effectiveMark, letterGrade, type ExamType } from "@/lib/grading";
+import { EXAM_TYPES, cgpaPoints, effectiveMark, letterGrade, type ExamType, type MarkStatus } from "@/lib/grading";
 import { markFor, sessionFor, subjectName, subjectsForForm, type Gradebook } from "@/lib/gradebook";
 import { cn } from "@/lib/utils";
 import { GradeBadge } from "./ui";
@@ -23,7 +23,7 @@ export function GradeTable({ book, form, highlight }: { book: Gradebook; form: n
         <table className="w-full min-w-[520px] text-sm">
           <thead>
             <tr className="text-xs uppercase tracking-wider text-muted-foreground">
-              <th className="sticky left-0 z-20 bg-background px-2 pb-2 text-left font-medium">{t("common.subject")}</th>
+              <th className="sticky left-0 z-20 bg-background/95 px-3 pb-2 text-left font-medium backdrop-blur-sm md:px-4">{t("common.subject")}</th>
               {EXAM_TYPES.map((e) => (
                 <th key={e} colSpan={2} className={cn("px-2 pb-2 text-center font-medium", highlight === e && "text-primary")}>
                   {t(`exam.${e}`)}
@@ -31,15 +31,23 @@ export function GradeTable({ book, form, highlight }: { book: Gradebook; form: n
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-border/60">
             {subjects.map((s) => (
-              <tr key={s.id}>
-                <td className="sticky left-0 z-10 bg-background px-2 py-2.5 font-medium">{subjectName(s, lang)}</td>
+              <tr key={s.id} className="transition-colors hover:bg-muted/30">
+                <td className="sticky left-0 z-10 bg-background/95 px-3 py-2.5 font-medium backdrop-blur-sm md:px-4">{subjectName(s, lang)}</td>
                 {sessions.map((sess, i) => {
                   const entry = markFor(book, sess?.id, s.id);
                   const mark = entry ? effectiveMark(entry) : null;
                   const highlightExam = highlight === EXAM_TYPES[i];
-                  return <FragmentCells key={i} highlight={highlightExam} mark={mark} status={entry?.status ?? null} />;
+                  return (
+                    <FragmentCells
+                      key={i}
+                      highlight={highlightExam}
+                      mark={mark}
+                      status={entry?.status ?? null}
+                      form={form}
+                    />
+                  );
                 })}
               </tr>
             ))}
@@ -50,18 +58,29 @@ export function GradeTable({ book, form, highlight }: { book: Gradebook; form: n
   );
 }
 
-function FragmentCells({ mark, highlight, status }: { mark: number | null; highlight: boolean; status: string | null }) {
+function FragmentCells({
+  mark,
+  highlight,
+  status,
+  form,
+}: {
+  mark: number | null;
+  highlight: boolean;
+  status: string | null;
+  form?: number;
+}) {
   const t = useT();
   const reason = t("grade.explain");
+  const validStatus = status && ["completed", "pending", "exempted", "absent"].includes(status) ? (status as MarkStatus) : null;
 
   return (
     <>
-      <td className={cn("px-2 py-2.5 text-right font-mono tabular", highlight && "bg-accent/50")} title={status ? t(`status.${status}`) : undefined}>
+      <td className={cn("px-2 py-2.5 text-right font-mono tabular", highlight && "bg-accent/50")} title={validStatus ? t(`status.${validStatus}`) : undefined}>
         {mark ?? <span className="text-muted-foreground">—</span>}
       </td>
       <td className={cn("px-2 py-2.5", highlight && "bg-accent/50")}>
         <div className="flex min-h-8 items-center gap-1.5">
-          <GradeBadge mark={mark} />
+          <GradeBadge mark={mark} form={form} />
           {status === "pending" && (
             <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium leading-4 text-muted-foreground">
               {t("status.pending")}
@@ -75,7 +94,7 @@ function FragmentCells({ mark, highlight, status }: { mark: number | null; highl
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <span>{reason}: {t("grade.letter")} {letterGrade(mark)} · {t("grade.points")} {cgpaPoints(mark).toFixed(2)}</span>
+                <span>{reason}: {t("grade.letter")} {letterGrade(mark, form)} · {t("grade.points")} {cgpaPoints(mark).toFixed(2)}</span>
               </TooltipContent>
             </Tooltip>
           )}

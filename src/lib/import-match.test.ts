@@ -14,6 +14,20 @@ describe("subject matching", () => {
     expect(matchSubject("Maths", subjects)).toBe("mt");
     expect(matchSubject("english", subjects)).toBe("bi");
   });
+  it("matches SPM electives", () => {
+    const spmCandidates = [
+      { id: "addmath", names: ["Matematik Tambahan", "Additional Mathematics"] },
+      { id: "fiz", names: ["Fizik", "Physics"] },
+      { id: "kim", names: ["Kimia", "Chemistry"] },
+      { id: "bio", names: ["Biologi", "Biology"] },
+      { id: "akaun", names: ["Prinsip Perakaunan", "Principles of Accounting"] },
+    ];
+    expect(matchSubject("Add Math", spmCandidates)).toBe("addmath");
+    expect(matchSubject("Physics", spmCandidates)).toBe("fiz");
+    expect(matchSubject("chem", spmCandidates)).toBe("kim");
+    expect(matchSubject("bio", spmCandidates)).toBe("bio");
+    expect(matchSubject("prinsip akaun", spmCandidates)).toBe("akaun");
+  });
   it("matches custom subjects by name", () => expect(matchSubject("bahasa iban", subjects)).toBe("iban"));
   it("leaves unknown subjects unmatched", () => expect(matchSubject("Kimia", subjects)).toBeNull());
 });
