@@ -38,9 +38,9 @@ export const Route = createFileRoute("/_authenticated/import")({
   head: () => ({
     meta: [
       { title: "Import keputusan · Import results — MarkahKu" },
-      { name: "description", content: "Import past results from Excel, CSV or a photo of your report card, then review before saving." },
+      { name: "description", content: "Import past results from Excel, CSV, a PDF or a photo of your report card, then review before saving." },
       { property: "og:title", content: "Import results — MarkahKu" },
-      { property: "og:description", content: "Import past results from Excel, CSV or a photo, then review before saving." },
+      { property: "og:description", content: "Import past results from Excel, CSV, a PDF or a photo, then review before saving." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
