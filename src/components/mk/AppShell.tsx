@@ -92,7 +92,7 @@ export function AppShell() {
   return (
     <div className="min-h-screen md:flex">
       {/* Desktop sidebar */}
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-4 backdrop-blur-xl md:flex">
+      <aside className="glass-strong sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-y-0 border-l-0 border-r border-sidebar-border bg-sidebar/60 p-4 backdrop-blur-2xl md:flex">
         <Link to="/dashboard" className="mb-8 px-2 pt-1">
           <Logo />
         </Link>
@@ -102,9 +102,9 @@ export function AppShell() {
               key={n.to}
               to={n.to}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
+                "flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition-all",
                 isActive(n.to)
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm ring-1 ring-white/10"
                   : "text-sidebar-foreground/75 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
               )}
             >
@@ -132,21 +132,21 @@ export function AppShell() {
       </aside>
 
       {/* Mobile header */}
-      <header className="glass-strong sticky top-0 z-30 flex items-center justify-between rounded-none border-x-0 border-t-0 px-4 py-3 md:hidden">
+      <header className="glass-strong sticky top-0 z-30 flex items-center justify-between rounded-none border-x-0 border-t-0 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:hidden">
         <Link to="/dashboard">
           <Logo />
         </Link>
         <LangToggle onChange={onLang} />
       </header>
 
-      <main className="min-w-0 flex-1 px-4 pb-28 pt-6 md:px-8 md:pb-12 md:pt-8 lg:px-10">
+      <main className="min-w-0 flex-1 px-4 pb-[calc(6.75rem+env(safe-area-inset-bottom))] pt-5 md:px-8 md:pb-12 md:pt-8 lg:px-10">
         <div className="mx-auto max-w-6xl animate-rise">
           <Outlet />
         </div>
       </main>
 
       {/* Mobile tab bar */}
-      <nav className="glass-strong fixed inset-x-3 bottom-3 z-40 flex justify-around rounded-2xl px-2 py-1.5 md:hidden">
+      <nav className="glass-strong fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-40 flex w-[calc(100%-1.5rem)] max-w-[30rem] -translate-x-1/2 justify-around rounded-full px-2 py-1.5 md:hidden">
         {TABS.map((to) => {
           const n = NAV.find((x) => x.to === to)!;
           return (
@@ -154,8 +154,8 @@ export function AppShell() {
               key={to}
               to={to}
               className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-[11px] font-medium",
-                isActive(to) ? "text-primary" : "text-muted-foreground",
+                "flex min-h-12 flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-1 py-1.5 text-[10px] font-semibold transition-colors",
+                isActive(to) ? "bg-primary/15 text-primary" : "text-muted-foreground",
               )}
             >
               <n.icon className="size-5" />
@@ -165,7 +165,7 @@ export function AppShell() {
         })}
         <button
           onClick={() => setMoreOpen(true)}
-          className="flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-[11px] font-medium text-muted-foreground"
+          className="flex min-h-12 flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-1 py-1.5 text-[10px] font-semibold text-muted-foreground transition-colors hover:bg-white/5"
         >
           <Menu className="size-5" />
           {t("nav.more")}
@@ -173,7 +173,7 @@ export function AppShell() {
       </nav>
 
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent side="bottom" className="glass-strong rounded-t-3xl border-x-0 border-b-0">
+        <SheetContent side="bottom" className="glass-strong max-h-[88svh] overflow-y-auto rounded-t-[2rem] border-x-0 border-b-0 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           <SheetHeader>
             <SheetTitle>{t("nav.more")}</SheetTitle>
           </SheetHeader>
@@ -183,7 +183,7 @@ export function AppShell() {
                 key={n.to}
                 to={n.to}
                 onClick={() => setMoreOpen(false)}
-                className="glass flex flex-col items-center gap-1.5 rounded-xl p-3 text-xs font-medium"
+                className="glass flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-xs font-medium transition-colors hover:bg-white/10"
               >
                 <n.icon className="size-5 text-primary" />
                 {t(n.label)}
