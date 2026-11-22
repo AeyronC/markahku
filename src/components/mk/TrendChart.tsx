@@ -14,8 +14,10 @@ export function TrendChart({ book, metric, form }: { book: Gradebook; metric: "a
       value: p[metric],
     }));
   if (pts.length === 0) return <div className="flex h-56 items-center justify-center text-sm text-muted-foreground">{t("exams.noData")}</div>;
+  const metricLabel = metric === "average" ? t("common.average") : t("common.cgpa");
+  const values = pts.map((p) => `${p.name}: ${metric === "average" ? formatAverage(p.value) : formatCgpa(p.value)}`).join(", ");
   return (
-    <div className="h-56 w-full">
+    <div className="h-56 w-full" role="img" aria-label={t("dash.trendAccessible", { metric: metricLabel, values })}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={pts} margin={{ top: 10, right: 12, left: -16, bottom: 0 }}>
           <defs>

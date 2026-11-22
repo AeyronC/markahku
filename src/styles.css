@@ -96,7 +96,7 @@
   --accent: oklch(0.82 0.13 198 / 14%);
   --accent-foreground: oklch(0.9 0.1 195);
   --destructive: oklch(0.65 0.21 25);
-  --destructive-foreground: oklch(0.98 0.01 240);
+  --destructive-foreground: oklch(0.18 0.04 262);
   --success: oklch(0.76 0.16 155);
   --warning: oklch(0.82 0.15 80);
   --border: oklch(1 0 0 / 11%);
@@ -152,9 +152,9 @@
   --card-foreground: oklch(0.24 0.055 262);
   --popover: oklch(0.995 0.004 245);
   --popover-foreground: oklch(0.24 0.055 262);
-  --primary: oklch(0.56 0.12 215);
+  --primary: oklch(0.52 0.12 215);
   --primary-foreground: oklch(0.99 0.005 240);
-  --primary-glow: oklch(0.6 0.12 180);
+  --primary-glow: oklch(0.52 0.12 180);
   --secondary: oklch(0.24 0.055 262 / 6%);
   --secondary-foreground: oklch(0.24 0.055 262);
   --muted: oklch(0.24 0.055 262 / 5%);
@@ -162,8 +162,9 @@
   --accent: oklch(0.56 0.12 215 / 11%);
   --accent-foreground: oklch(0.4 0.11 220);
   --destructive: oklch(0.56 0.21 25);
-  --success: oklch(0.55 0.15 155);
-  --warning: oklch(0.62 0.15 70);
+  --destructive-foreground: oklch(0.98 0.01 240);
+  --success: oklch(0.52 0.15 155);
+  --warning: oklch(0.45 0.15 70);
   --border: oklch(0.24 0.055 262 / 11%);
   --input: oklch(0.24 0.055 262 / 16%);
   --ring: oklch(0.56 0.12 215);
@@ -178,7 +179,7 @@
     linear-gradient(160deg, oklch(0.97 0.014 245), oklch(0.93 0.03 245));
   --gradient-text: linear-gradient(120deg, oklch(0.42 0.12 230), oklch(0.5 0.12 180));
 
-  --grade-ink: oklch(0.2 0.04 262);
+  --grade-ink: oklch(0.18 0.04 262);
   --google-bg: #ffffff;
   --google-border: #747775;
   --google-text: #1f1f1f;
@@ -216,6 +217,10 @@
   h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+  }
+  :where(a, button, input, select, textarea, [role="tab"], [role="switch"], [role="combobox"], [tabindex]):focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
   }
 }
 
@@ -267,4 +272,15 @@
 
 @utility animate-rise {
   animation: rise-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

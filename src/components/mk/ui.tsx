@@ -111,8 +111,9 @@ export function EmptyState({ icon, title, sub, action }: { icon?: ReactNode; tit
 
 export function LangToggle({ onChange }: { onChange?: (l: "ms" | "en") => void }) {
   const { lang, setLang } = usePrefs();
+  const t = useT();
   return (
-    <div className="glass inline-flex rounded-lg p-0.5 text-xs font-semibold" role="group" aria-label="Language">
+    <div className="glass inline-flex rounded-lg p-0.5 text-xs font-semibold" role="group" aria-label={t("common.language")}>
       {(["ms", "en"] as const).map((l) => (
         <button
           key={l}
@@ -122,7 +123,7 @@ export function LangToggle({ onChange }: { onChange?: (l: "ms" | "en") => void }
             onChange?.(l);
           }}
           className={cn(
-            "rounded-md px-2.5 py-1 transition-colors",
+            "min-h-11 min-w-11 rounded-md px-2.5 py-1 transition-colors",
             lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
           )}
           aria-pressed={lang === l}

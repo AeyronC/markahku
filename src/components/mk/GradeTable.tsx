@@ -52,8 +52,7 @@ export function GradeTable({ book, form, highlight }: { book: Gradebook; form: n
 
 function FragmentCells({ mark, highlight, status }: { mark: number | null; highlight: boolean; status: string | null }) {
   const t = useT();
-  const { lang } = usePrefs();
-  const reason = lang === "ms" ? "Mengapa gred ini?" : "Why this grade?";
+  const reason = t("grade.explain");
 
   return (
     <>

@@ -104,6 +104,9 @@ const en = {
   "dash.trend": "Trend",
   "dash.trendCurrent": "This Form",
   "dash.trendAll": "All Forms",
+  "dash.trendMetric": "Trend measure",
+  "dash.trendScope": "Trend range",
+  "dash.trendAccessible": "{metric} trend across exams: {values}",
   "dash.goals": "Goal progress",
   "dash.noGoals": "No goals yet.",
   "dash.setGoals": "Set goals",
@@ -171,10 +174,8 @@ const en = {
   "imp.badType": "That file type isn't supported.",
   "imp.nothing": "No marks were found in that file.",
   "imp.capReached": "You've used today's photo reads. Come back tomorrow, or type the marks in.",
-  "imp.template": "Muat turun templat CSV",
-  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka; PDF boleh mempunyai sehingga 20 halaman."
   "imp.template": "Download CSV template",
-  "imp.unreadable": "We could not read that file. Check that it opens correctly; PDFs can have up to 20 pages."
+  "imp.unreadable": "We could not read that file. Check that it opens correctly; PDFs can have up to 20 pages.",
 
   "yr.title": "Yearly view",
   "yr.sub": "All three exams of a Form, combined.",
@@ -191,6 +192,7 @@ const en = {
   "goals.targetAvg": "Target average",
   "goals.targetCgpa": "Target CGPA",
   "goals.toGo": "{n} marks to go",
+  "goals.gap": "{n} marks to reach grade {grade} in {subject}",
   "goals.toGoCgpa": "{n} points to go",
   "goals.met": "Reached",
   "goals.noMark": "No mark yet",
@@ -210,6 +212,8 @@ const en = {
   "ai.regenerate": "Regenerate",
   "ai.generating": "Thinking…",
   "ai.generatedOn": "Generated {d}",
+  "ai.dataThrough": "Data through {d}",
+  "ai.unchanged": "Marks have not changed since the last result.",
   "ai.empty": "Nothing generated yet.",
   "ai.needData": "Add some marks for this Form first.",
   "ai.capReached": "You've reached today's AI limit. Come back tomorrow!",
@@ -240,9 +244,25 @@ const en = {
   "set.deleted": "Your account has been deleted.",
 
   "priv.title": "Privacy",
+  "priv.intro": "MarkahKu is built for students. Here's how your data is handled, in plain language.",
+  "priv.storedTitle": "What's stored",
+  "priv.storedBody": "Your display name, school and class (if you fill them in), Form, subjects, marks, ranks, goals and AI results.",
+  "priv.visibilityTitle": "Who can see it",
+  "priv.visibilityBody": "Only you. No teachers, parents, friends or admins can see your marks. There are no share links or leaderboards.",
+  "priv.filesTitle": "Original files",
+  "priv.filesBody": "Photos, screenshots, PDFs and Excel/CSV files you import are kept privately so you can look at them again. Only you can open them.",
+  "priv.aiTitle": "AI",
+  "priv.aiBody": "When you ask for an analysis, a study plan or an image/PDF read, only your marks, subjects, goals and Form go to the AI provider. Your name, email and school are never sent. Report card photos and rendered PDF pages are sent to be read, so avoid documents that show other personal details.",
+  "priv.trackersTitle": "No trackers",
+  "priv.trackersBody": "No ads, analytics or third-party trackers.",
+  "priv.deleteTitle": "Delete everything",
+  "priv.deleteBody": "Go to Settings → Delete my account and all data. All your marks, files and your account are removed right away. You can download all your data first.",
+  "priv.minorsTitle": "If you're under 18",
+  "priv.minorsBody": "Talk to a parent or teacher before using the app. Google accounts for minors follow Google's rules and Malaysia's PDPA.",
 
   "grade.letter": "Letter grade",
   "grade.points": "CGPA points",
+  "grade.explain": "Why this grade?",
 };
 
 export type DictKey = keyof typeof en;
@@ -351,6 +371,9 @@ const ms: Record<DictKey, string> = {
   "dash.trend": "Trend",
   "dash.trendCurrent": "Tingkatan ini",
   "dash.trendAll": "Semua Tingkatan",
+  "dash.trendMetric": "Ukuran trend",
+  "dash.trendScope": "Julat trend",
+  "dash.trendAccessible": "Trend {metric} mengikut peperiksaan: {values}",
   "dash.goals": "Kemajuan sasaran",
   "dash.noGoals": "Belum ada sasaran.",
   "dash.setGoals": "Tetapkan sasaran",
@@ -419,7 +442,7 @@ const ms: Record<DictKey, string> = {
   "imp.nothing": "Tiada markah dijumpai dalam fail itu.",
   "imp.capReached": "Had bacaan gambar hari ini sudah habis. Cuba esok, atau taip markah sendiri.",
   "imp.template": "Muat turun templat CSV",
-  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka dan cuba lagi."
+  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka dan cuba lagi.",
 
   "yr.title": "Paparan tahunan",
   "yr.sub": "Ketiga-tiga peperiksaan satu Tingkatan, digabungkan.",
@@ -436,6 +459,7 @@ const ms: Record<DictKey, string> = {
   "goals.targetAvg": "Purata sasaran",
   "goals.targetCgpa": "CGPA sasaran",
   "goals.toGo": "{n} markah lagi",
+  "goals.gap": "{n} markah lagi untuk mencapai gred {grade} bagi {subject}",
   "goals.toGoCgpa": "{n} mata lagi",
   "goals.met": "Tercapai",
   "goals.noMark": "Belum ada markah",
@@ -455,6 +479,8 @@ const ms: Record<DictKey, string> = {
   "ai.regenerate": "Jana semula",
   "ai.generating": "Sedang berfikir…",
   "ai.generatedOn": "Dijana {d}",
+  "ai.dataThrough": "Data hingga {d}",
+  "ai.unchanged": "Markah belum berubah sejak keputusan terakhir.",
   "ai.empty": "Belum ada yang dijana.",
   "ai.needData": "Masukkan markah untuk Tingkatan ini dahulu.",
   "ai.capReached": "Had AI hari ini sudah dicapai. Cuba lagi esok!",
@@ -485,9 +511,25 @@ const ms: Record<DictKey, string> = {
   "set.deleted": "Akaun anda telah dipadam.",
 
   "priv.title": "Privasi",
+  "priv.intro": "MarkahKu dibina untuk pelajar. Ini cara kami menjaga data anda, dalam bahasa yang mudah.",
+  "priv.storedTitle": "Apa yang disimpan",
+  "priv.storedBody": "Nama paparan, sekolah dan kelas (jika anda isi), Tingkatan, subjek, markah, kedudukan, sasaran dan hasil AI anda.",
+  "priv.visibilityTitle": "Siapa boleh lihat",
+  "priv.visibilityBody": "Hanya anda. Tiada guru, ibu bapa, rakan atau pentadbir boleh melihat markah anda. Tiada pautan kongsi atau papan pendahulu.",
+  "priv.filesTitle": "Fail asal",
+  "priv.filesBody": "Gambar, tangkapan skrin, PDF dan fail Excel/CSV yang anda import disimpan secara peribadi supaya anda boleh lihat semula. Hanya anda boleh membukanya.",
+  "priv.aiTitle": "AI",
+  "priv.aiBody": "Apabila anda minta analisis, pelan belajar atau bacaan gambar/PDF, hanya markah, subjek, sasaran dan Tingkatan dihantar ke penyedia AI. Nama, e-mel dan sekolah anda tidak dihantar. Gambar kad laporan dan halaman PDF yang dirender dihantar untuk dibaca, jadi elakkan dokumen yang menunjukkan maklumat peribadi lain.",
+  "priv.trackersTitle": "Tiada penjejak",
+  "priv.trackersBody": "Tiada iklan, analitik atau penjejak pihak ketiga.",
+  "priv.deleteTitle": "Padam semuanya",
+  "priv.deleteBody": "Pergi ke Tetapan → Padam akaun dan semua data saya. Semua markah, fail dan akaun anda dipadam serta-merta. Anda juga boleh muat turun semua data anda dahulu.",
+  "priv.minorsTitle": "Untuk pelajar bawah 18 tahun",
+  "priv.minorsBody": "Bincang dengan ibu bapa atau guru sebelum menggunakan aplikasi ini. Akaun Google untuk bawah umur tertakluk kepada peraturan Google dan PDPA Malaysia.",
 
   "grade.letter": "Gred huruf",
   "grade.points": "Mata CGPA",
+  "grade.explain": "Mengapa gred ini?",
 };
 
 export const DICT: Record<Lang, Record<DictKey, string>> = { en, ms };

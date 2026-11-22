@@ -117,12 +117,12 @@ function Analyst() {
             return (
               <TabsContent key={kind} value={kind} className="mt-4">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <span className="text-sm text-muted-foreground">{item ? <>{t("ai.generatedOn", { d: fmtDate(item.created_at) })}{dataUsedAt && <span> · {lang === "ms" ? "Data hingga" : "Data through"} {fmtDataDate(dataUsedAt)}</span>}</> : t("ai.empty")}</span>
+                  <span className="text-sm text-muted-foreground">{item ? <>{t("ai.generatedOn", { d: fmtDate(item.created_at) })}{dataUsedAt && <span> · {t("ai.dataThrough", { d: fmtDataDate(dataUsedAt) })}</span>}</> : t("ai.empty")}</span>
                   <Button variant="hero" onClick={() => generate(kind)} disabled={!!busy || (!!item && !marksChangedSince(item))}>
                     {busy === kind ? <Loader2 className="animate-spin" /> : item ? <RefreshCw /> : <Sparkles />}
                     {busy === kind ? t("ai.generating") : item ? t("ai.regenerate") : t("ai.generate")}
                   </Button>
-                  {item && !marksChangedSince(item) && <p className="w-full text-right text-xs text-muted-foreground">{lang === "ms" ? "Markah belum berubah sejak keputusan terakhir." : "Marks have not changed since the last result."}</p>}
+                  {item && !marksChangedSince(item) && <p className="w-full text-right text-xs text-muted-foreground">{t("ai.unchanged")}</p>}
                 </div>
                 {busy === kind && !item ? (
                   <Skeleton className="h-64 rounded-2xl" />
