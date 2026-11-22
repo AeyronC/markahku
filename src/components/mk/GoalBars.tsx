@@ -70,9 +70,7 @@ export function GoalBars({ book, form, compact }: { book: Gradebook; form: numbe
         const p = subjectGoalProgress(latest, g.target_grade as GoalLetter);
         const name = subjectName(subj, lang);
         const gapNote = p.gap != null
-          ? lang === "ms"
-            ? `${Math.ceil(p.gap)} markah lagi untuk mencapai gred ${g.target_grade} dalam ${name}`
-            : `${Math.ceil(p.gap)} marks to reach ${g.target_grade} in ${name}`
+          ? t("goals.gap", { n: Math.ceil(p.gap), grade: g.target_grade, subject: name })
           : t("goals.noMark");
         return (
           <Bar
