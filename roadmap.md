@@ -7,5 +7,5 @@ Initial build (done): foundation, onboarding, grading, exams, dashboard, goals, 
 - [x] Phase B – Grading tests + test script
 - [x] Phase C – Import wizard completeness (PDF, CSV template, messages)
 - [x] Phase D – Experience polish
-- [ ] Phase E – Language and accessibility audit
+- [x] Phase E – Language and accessibility audit
 - [ ] Phase F – Housekeeping (README, logging, deps, build)
