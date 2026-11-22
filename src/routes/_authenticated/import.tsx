@@ -70,6 +70,7 @@ async function renderPdf(file: File): Promise<string[]> {
   const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
   const images: string[] = [];
   try {
+    if (pdf.numPages > 20) throw new Error("PDF has too many pages");
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       const page = await pdf.getPage(pageNumber);
       const initial = page.getViewport({ scale: 1 });
