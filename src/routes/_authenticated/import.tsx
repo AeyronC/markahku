@@ -64,25 +64,34 @@ type DupChoice = "keep" | "replace" | "skip";
 const MAX_BYTES = 5 * 1024 * 1024;
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-async function renderPdf(file: File): Promise<string> {
+async function renderPdf(file: File): Promise<string[]> {
   const pdfjs = await import("pdfjs-dist");
   pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
   const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
-  const page = await pdf.getPage(1);
-  const initial = page.getViewport({ scale: 1 });
-  const scale = Math.min(1, 2000 / Math.max(initial.width, initial.height));
-  const viewport = page.getViewport({ scale });
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(viewport.width);
-  canvas.height = Math.round(viewport.height);
-  const context = canvas.getContext("2d");
-  if (!context) throw new Error("Unable to render PDF");
-  await page.render({ canvas, canvasContext: context, viewport }).promise;
-  const image = canvas.toDataURL("image/jpeg", 0.85);
-  canvas.width = 0;
-  canvas.height = 0;
-  await pdf.destroy();
-  return image;
+  const images: string[] = [];
+  try {
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber);
+      const initial = page.getViewport({ scale: 1 });
+      const scale = Math.min(1, 1600 / Math.max(initial.width, initial.height));
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(viewport.width);
+      canvas.height = Math.round(viewport.height);
+      const context = canvas.getContext("2d");
+      if (!context) throw new Error("Unable to render PDF");
+      await page.render({ canvas, canvasContext: context, viewport }).promise;
+      images.push(canvas.toDataURL("image/jpeg", 0.8));
+      canvas.width = 0;
+      canvas.height = 0;
+    }
+  } finally {
+    await pdf.destroy();
+  }
+  if (images.reduce((total, image) => total + image.length, 0) > 7_200_000) {
+    throw new Error("Rendered PDF is too large");
+  }
+  return images;
 }
 
 async function downscale(file: File): Promise<string> {
@@ -169,9 +178,9 @@ function ImportWizard() {
     setStep(3);
     setBusy("ocr");
     try {
-      const dataUrl = isPdf ? await renderPdf(f) : await downscale(f);
-      setPreview(dataUrl);
-      const res = await ocr({ data: { image: dataUrl, form } });
+      const images = isPdf ? await renderPdf(f) : [await downscale(f)];
+      setPreview(images[0]!);
+      const res = await ocr({ data: { images, form } });
       if (!res.ok) {
         toast.error(res.code === "cap" ? t("imp.capReached") : t("common.error"));
         setStep(2);
