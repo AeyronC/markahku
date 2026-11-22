@@ -14,6 +14,7 @@ import { ExamSelect, FormSelect, GradeBadge, PageHeader } from "@/components/mk/
 import { usePrefs, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { EXAM_TYPES, MARK_STATUSES, effectiveMark, normalizeEntry, parseMarkInput, type ExamType, type MarkStatus } from "@/lib/grading";
+import { downloadMarksTemplate } from "@/lib/export";
 import {
   addCustomSubject,
   currentUserId,
@@ -31,6 +32,7 @@ import {
 } from "@/lib/gradebook";
 import { NONE, guessMapping, matchSubject, sheetToRows, type SheetMapping } from "@/lib/import-match";
 import { ocrMarks } from "@/lib/ai.functions";
+import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
 export const Route = createFileRoute("/_authenticated/import")({
   head: () => ({
@@ -46,7 +48,7 @@ export const Route = createFileRoute("/_authenticated/import")({
   component: ImportWizard,
 });
 
-type Kind = "sheet" | "image";
+type Kind = "sheet" | "image" | "pdf";
 type Row = {
   key: string;
   form: number;
@@ -61,6 +63,27 @@ type DupChoice = "keep" | "replace" | "skip";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+async function renderPdf(file: File): Promise<string> {
+  const pdfjs = await import("pdfjs-dist");
+  pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
+  const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  const page = await pdf.getPage(1);
+  const initial = page.getViewport({ scale: 1 });
+  const scale = Math.min(1, 2000 / Math.max(initial.width, initial.height));
+  const viewport = page.getViewport({ scale });
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(viewport.width);
+  canvas.height = Math.round(viewport.height);
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Unable to render PDF");
+  await page.render({ canvas, canvasContext: context, viewport }).promise;
+  const image = canvas.toDataURL("image/jpeg", 0.85);
+  canvas.width = 0;
+  canvas.height = 0;
+  await pdf.destroy();
+  return image;
+}
 
 async function downscale(file: File): Promise<string> {
   const url = URL.createObjectURL(file);
@@ -117,7 +140,8 @@ function ImportWizard() {
     const name = f.name.toLowerCase();
     const isSheet = name.endsWith(".xlsx") || name.endsWith(".xls") || name.endsWith(".csv");
     const isImage = IMAGE_TYPES.includes(f.type);
-    if (!isSheet && !isImage) { toast.error(t("imp.badType")); return; }
+    const isPdf = name.endsWith(".pdf") || f.type === "application/pdf";
+    if (!isSheet && !isImage && !isPdf) { toast.error(t("imp.badType")); return; }
     setFile(f);
     if (isSheet) {
       setBusy("read");
@@ -134,18 +158,19 @@ function ImportWizard() {
         setStep(3);
       } catch (e) {
         console.error(e);
-        toast.error(t("common.error"));
+        toast.error(t("imp.unreadable"));
       } finally {
         setBusy(null);
       }
       return;
     }
-    setKind("image");
-    setPreview(URL.createObjectURL(f));
+    setKind(isPdf ? "pdf" : "image");
+    setPreview(isPdf ? null : URL.createObjectURL(f));
     setStep(3);
     setBusy("ocr");
     try {
-      const dataUrl = await downscale(f);
+      const dataUrl = isPdf ? await renderPdf(f) : await downscale(f);
+      setPreview(dataUrl);
       const res = await ocr({ data: { image: dataUrl, form } });
       if (!res.ok) {
         toast.error(res.code === "cap" ? t("imp.capReached") : t("common.error"));
@@ -170,7 +195,7 @@ function ImportWizard() {
       );
     } catch (e) {
       console.error(e);
-      toast.error(t("common.error"));
+      toast.error(t("imp.unreadable"));
       setStep(2);
     } finally {
       setBusy(null);
@@ -285,7 +310,7 @@ function ImportWizard() {
           .map((r) => {
             const e = rowEntry(r)!;
             const id = r.subjectId === "__new" ? newIds.get(`${r.form}|${r.raw.toLowerCase()}`)! : r.subjectId;
-            return { user_subject_id: id, status: e.status, mark: e.mark, source: kind === "image" ? ("ocr" as const) : ("import" as const), source_file_id: fileIds.get(k) ?? null };
+            return { user_subject_id: id, status: e.status, mark: e.mark, source: kind === "image" || kind === "pdf" ? ("ocr" as const) : ("import" as const), source_file_id: fileIds.get(k) ?? null };
           })
           .reverse()
           .filter((w) => (seen.has(w.user_subject_id) ? false : (seen.add(w.user_subject_id), true)));
@@ -395,14 +420,17 @@ function ImportWizard() {
                   ref={fileRef}
                   type="file"
                   className="hidden"
-                  accept=".xlsx,.xls,.csv,image/jpeg,image/png,image/webp"
+                  accept=".xlsx,.xls,.csv,.pdf,image/jpeg,image/png,image/webp,application/pdf"
                   onChange={(e) => {
                     const f = e.target.files?.[0];
                     e.target.value = "";
                     if (f) void onFile(f);
                   }}
                 />
-                <div className="mt-4 flex justify-start">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                  <Button variant="outline" onClick={() => void downloadMarksTemplate()}>
+                    <FileSpreadsheet className="size-4" /> {t("imp.template")}
+                  </Button>
                   <Button variant="ghost" onClick={() => setStep(1)}>
                     {t("common.back")}
                   </Button>
