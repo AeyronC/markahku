@@ -252,6 +252,18 @@ describe("summarizeExam", () => {
     expect(empty.cgpa).toBeNull();
   });
 
+  it("mixes all four statuses: absent is 0, pending and exempted are left out", () => {
+    const s = summarizeExam([done(90), done(70), absent(), pending(), exempted()]);
+    expect(s.counted).toBe(3);
+    expect(s.pending).toBe(1);
+    expect(s.exempted).toBe(1);
+    expect(s.absent).toBe(1);
+    expect(s.total).toBe(160);
+    expect(s.average).toBe(53.33);
+    // (4.00 + 3.50 + 0.00) / 3
+    expect(s.cgpa).toBe(2.5);
+  });
+
   it("treats a completed entry with no mark as pending", () => {
     const s = summarizeExam([{ status: "completed", mark: null }, done(60)]);
     expect(s.pending).toBe(1);
@@ -341,6 +353,16 @@ describe("yearlySummary", () => {
     const two = yearlySummary([summarizeExam(SUMATIF_1), summarizeExam(SUMATIF_2), summarizeExam([])]);
     expect(two.average).toBeCloseTo((79.73 + 82.2) / 2, 2);
     expect(two.cgpa).toBeCloseTo((3.61 + 3.7) / 2, 2);
+  });
+  it("weights all three exams equally", () => {
+    const three = yearlySummary([
+      summarizeExam([done(70)]),
+      summarizeExam([done(80)]),
+      summarizeExam([done(90)]),
+    ]);
+    expect(three.average).toBe(80);
+    // (3.50 + 3.75 + 4.00) / 3 = 3.75
+    expect(three.cgpa).toBe(3.75);
   });
   it("is null when no exam has data", () => {
     const none = yearlySummary([summarizeExam([]), summarizeExam([pending()])]);
