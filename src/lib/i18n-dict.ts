@@ -104,6 +104,8 @@ const en = {
   "dash.trend": "Trend",
   "dash.trendCurrent": "This Form",
   "dash.trendAll": "All Forms",
+  "dash.trendMetric": "Trend measure",
+  "dash.trendScope": "Trend range",
   "dash.goals": "Goal progress",
   "dash.noGoals": "No goals yet.",
   "dash.setGoals": "Set goals",
@@ -171,10 +173,8 @@ const en = {
   "imp.badType": "That file type isn't supported.",
   "imp.nothing": "No marks were found in that file.",
   "imp.capReached": "You've used today's photo reads. Come back tomorrow, or type the marks in.",
-  "imp.template": "Muat turun templat CSV",
-  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka; PDF boleh mempunyai sehingga 20 halaman."
   "imp.template": "Download CSV template",
-  "imp.unreadable": "We could not read that file. Check that it opens correctly; PDFs can have up to 20 pages."
+  "imp.unreadable": "We could not read that file. Check that it opens correctly; PDFs can have up to 20 pages.",
 
   "yr.title": "Yearly view",
   "yr.sub": "All three exams of a Form, combined.",
@@ -191,6 +191,7 @@ const en = {
   "goals.targetAvg": "Target average",
   "goals.targetCgpa": "Target CGPA",
   "goals.toGo": "{n} marks to go",
+  "goals.gap": "{n} marks to reach grade {grade} in {subject}",
   "goals.toGoCgpa": "{n} points to go",
   "goals.met": "Reached",
   "goals.noMark": "No mark yet",
@@ -210,6 +211,8 @@ const en = {
   "ai.regenerate": "Regenerate",
   "ai.generating": "Thinking…",
   "ai.generatedOn": "Generated {d}",
+  "ai.dataThrough": "Data through {d}",
+  "ai.unchanged": "Marks have not changed since the last result.",
   "ai.empty": "Nothing generated yet.",
   "ai.needData": "Add some marks for this Form first.",
   "ai.capReached": "You've reached today's AI limit. Come back tomorrow!",
@@ -243,6 +246,7 @@ const en = {
 
   "grade.letter": "Letter grade",
   "grade.points": "CGPA points",
+  "grade.explain": "Why this grade?",
 };
 
 export type DictKey = keyof typeof en;
@@ -351,6 +355,8 @@ const ms: Record<DictKey, string> = {
   "dash.trend": "Trend",
   "dash.trendCurrent": "Tingkatan ini",
   "dash.trendAll": "Semua Tingkatan",
+  "dash.trendMetric": "Ukuran trend",
+  "dash.trendScope": "Julat trend",
   "dash.goals": "Kemajuan sasaran",
   "dash.noGoals": "Belum ada sasaran.",
   "dash.setGoals": "Tetapkan sasaran",
@@ -419,7 +425,7 @@ const ms: Record<DictKey, string> = {
   "imp.nothing": "Tiada markah dijumpai dalam fail itu.",
   "imp.capReached": "Had bacaan gambar hari ini sudah habis. Cuba esok, atau taip markah sendiri.",
   "imp.template": "Muat turun templat CSV",
-  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka dan cuba lagi."
+  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka dan cuba lagi.",
 
   "yr.title": "Paparan tahunan",
   "yr.sub": "Ketiga-tiga peperiksaan satu Tingkatan, digabungkan.",
@@ -436,6 +442,7 @@ const ms: Record<DictKey, string> = {
   "goals.targetAvg": "Purata sasaran",
   "goals.targetCgpa": "CGPA sasaran",
   "goals.toGo": "{n} markah lagi",
+  "goals.gap": "{n} markah lagi untuk mencapai gred {grade} bagi {subject}",
   "goals.toGoCgpa": "{n} mata lagi",
   "goals.met": "Tercapai",
   "goals.noMark": "Belum ada markah",
@@ -455,6 +462,8 @@ const ms: Record<DictKey, string> = {
   "ai.regenerate": "Jana semula",
   "ai.generating": "Sedang berfikir…",
   "ai.generatedOn": "Dijana {d}",
+  "ai.dataThrough": "Data hingga {d}",
+  "ai.unchanged": "Markah belum berubah sejak keputusan terakhir.",
   "ai.empty": "Belum ada yang dijana.",
   "ai.needData": "Masukkan markah untuk Tingkatan ini dahulu.",
   "ai.capReached": "Had AI hari ini sudah dicapai. Cuba lagi esok!",
@@ -488,6 +497,7 @@ const ms: Record<DictKey, string> = {
 
   "grade.letter": "Gred huruf",
   "grade.points": "Mata CGPA",
+  "grade.explain": "Mengapa gred ini?",
 };
 
 export const DICT: Record<Lang, Record<DictKey, string>> = { en, ms };
