@@ -152,13 +152,13 @@ function Dashboard() {
               <CardTitle>{t("dash.trend")}</CardTitle>
               <div className="grid w-full gap-2">
                 <Tabs value={metric} onValueChange={(v) => setMetric(v as "average" | "cgpa")}>
-                  <TabsList aria-label={t("dash.trendMetric")} className="h-11 w-full">
+                  <TabsList aria-label={t("dash.trendMetric")} className="h-12 w-full p-0.5">
                     <TabsTrigger value="average" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("common.average")}</TabsTrigger>
                     <TabsTrigger value="cgpa" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("common.cgpa")}</TabsTrigger>
                   </TabsList>
                 </Tabs>
                 <Tabs value={scope} onValueChange={(v) => setScope(v as "current" | "all")}>
-                  <TabsList aria-label={t("dash.trendScope")} className="h-11 w-full">
+                  <TabsList aria-label={t("dash.trendScope")} className="h-12 w-full p-0.5">
                     <TabsTrigger value="current" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("dash.trendCurrent")}</TabsTrigger>
                     <TabsTrigger value="all" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("dash.trendAll")}</TabsTrigger>
                   </TabsList>
