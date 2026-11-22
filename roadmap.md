@@ -3,7 +3,7 @@
 Initial build (done): foundation, onboarding, grading, exams, dashboard, goals, yearly, rank, exports, import wizard, AI analyst, privacy, data download, account deletion.
 
 ## Hardening pass (user brief, phase by phase, stop after each)
-- [ ] Phase A – Security audit (RLS, storage, ai_usage, server fns, delete account, keys)
+- [x] Phase A – Security audit (RLS, storage, ai_usage, server fns, delete account, keys)
 - [ ] Phase B – Grading tests + test script
 - [ ] Phase C – Import wizard completeness (PDF, CSV template, messages)
 - [ ] Phase D – Experience polish

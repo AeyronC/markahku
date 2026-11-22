@@ -4,6 +4,19 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const MODEL = "openai/gpt-6-astra" as const;
 
+/**
+ * Log a failure without its message or body: error text from the model or the database can
+ * echo marks, images or model output, which must never reach the logs.
+ */
+function logFailure(where: string, e: unknown) {
+  const err = e as { name?: unknown; status?: unknown; code?: unknown } | null;
+  console.error(`[ai] ${where}`, {
+    name: typeof err?.name === "string" ? err.name : typeof e,
+    status: typeof err?.status === "number" ? err.status : undefined,
+    code: typeof err?.code === "string" || typeof err?.code === "number" ? err.code : undefined,
+  });
+}
+
 type AiResult<T> = { ok: true; data: T } | { ok: false; code: "cap" | "failed" | "refused" };
 
 async function callModel(
@@ -99,7 +112,7 @@ export const ocrMarks = createServerFn({ method: "POST" })
     const cap = Number(process.env["OCR_DAILY_CAP"] ?? 10) || 10;
     const { data: allowed, error } = await context.supabase.rpc("consume_ai_call", { _kind: "ocr", _cap: cap });
     if (error) {
-      console.error("usage check failed", error);
+      logFailure("usage check failed", error);
       return { ok: false, code: "failed" };
     }
     if (!allowed) return { ok: false, code: "cap" };
@@ -158,7 +171,7 @@ export const ocrMarks = createServerFn({ method: "POST" })
         }));
       return { ok: true, data: rows };
     } catch (e) {
-      console.error("ocr failed", e);
+      logFailure("ocr failed", e);
       return { ok: false, code: e instanceof Error && e.message === "refused" ? "refused" : "failed" };
     }
   });
@@ -275,7 +288,7 @@ export const runAnalyst = createServerFn({ method: "POST" })
     const cap = Number(process.env["AI_DAILY_CAP"] ?? 30) || 30;
     const { data: allowed, error } = await context.supabase.rpc("consume_ai_call", { _kind: "ai", _cap: cap });
     if (error) {
-      console.error("usage check failed", error);
+      logFailure("usage check failed", error);
       return { ok: false, code: "failed" };
     }
     if (!allowed) return { ok: false, code: "cap" };
@@ -306,7 +319,7 @@ export const runAnalyst = createServerFn({ method: "POST" })
       if (insErr) throw insErr;
       return { ok: true, data: row };
     } catch (e) {
-      console.error("analyst failed", e);
+      logFailure("analyst failed", e);
       return { ok: false, code: e instanceof Error && e.message === "refused" ? "refused" : "failed" };
     }
   });
