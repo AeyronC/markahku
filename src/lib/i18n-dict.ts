@@ -172,9 +172,9 @@ const en = {
   "imp.nothing": "No marks were found in that file.",
   "imp.capReached": "You've used today's photo reads. Come back tomorrow, or type the marks in.",
   "imp.template": "Muat turun templat CSV",
-  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka dan cuba lagi."
+  "imp.unreadable": "Fail itu tidak dapat dibaca. Pastikan fail boleh dibuka; PDF boleh mempunyai sehingga 20 halaman."
   "imp.template": "Download CSV template",
-  "imp.unreadable": "We could not read that file. Check that it opens correctly and try again."
+  "imp.unreadable": "We could not read that file. Check that it opens correctly; PDFs can have up to 20 pages."
 
   "yr.title": "Yearly view",
   "yr.sub": "All three exams of a Form, combined.",
