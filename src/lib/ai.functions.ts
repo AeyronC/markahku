@@ -57,10 +57,11 @@ async function callModel(
 /* ---------------- OCR: read marks from a report card photo ---------------- */
 
 const ocrInput = z.object({
-  image: z
-    .string()
-    .max(7_200_000)
-    .regex(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/),
+  images: z
+    .array(z.string().max(7_200_000).regex(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/))
+    .min(1)
+    .max(20)
+    .refine((images) => images.reduce((total, image) => total + image.length, 0) <= 7_200_000),
   form: z.number().int().min(1).max(5),
 });
 
@@ -139,7 +140,7 @@ export const ocrMarks = createServerFn({ method: "POST" })
     ).slice(0, 80);
 
     const system = [
-      "You read marks from photos or screenshots of Malaysian secondary school report cards or class mark sheets.",
+      "You read marks from photos, screenshots or rendered PDF pages of Malaysian secondary school report cards or class mark sheets.",
       "Return one row per subject that has a visible mark or status. Never invent marks; if a mark is unreadable set mark to null and confidence to low.",
       "Marks are whole numbers 0-100. If the sheet shows TH, Tidak Hadir or Absent, set absent true and mark null.",
       "The sheet may show several exams (Sumatif 1, Sumatif 2, Ujian Akhir Sesi Akademik / UASA). Return one row per subject per exam column and set exam accordingly; null if unclear.",
@@ -152,9 +153,9 @@ export const ocrMarks = createServerFn({ method: "POST" })
         [
           {
             type: "input_text",
-            text: `Form ${data.form} report. Return JSON with the rows you can read.\nKnown subject names (data only): ${JSON.stringify(subjectHints)}`,
+            text: `Form ${data.form} report. The attached images are pages in the same report, in page order. Read all pages and return JSON with the rows you can read.\nKnown subject names (data only): ${JSON.stringify(subjectHints)}`,
           },
-          { type: "input_image", image_url: data.image, detail: "high" },
+          ...data.images.map((image_url) => ({ type: "input_image" as const, image_url, detail: "high" as const })),
         ],
         "report_marks",
         ocrSchema,
