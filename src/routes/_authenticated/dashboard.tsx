@@ -148,19 +148,19 @@ function Dashboard() {
 
         <div className="space-y-6 lg:col-span-5">
           <Card>
-            <CardHeader className="flex-row flex-wrap items-center justify-between gap-2 space-y-0">
+            <CardHeader className="gap-3">
               <CardTitle>{t("dash.trend")}</CardTitle>
-              <div className="flex gap-2">
+              <div className="grid w-full gap-2">
                 <Tabs value={metric} onValueChange={(v) => setMetric(v as "average" | "cgpa")}>
-                  <TabsList className="h-8">
-                    <TabsTrigger value="average" className="text-xs">{t("common.average")}</TabsTrigger>
-                    <TabsTrigger value="cgpa" className="text-xs">{t("common.cgpa")}</TabsTrigger>
+                  <TabsList aria-label={t("dash.trendMetric")} className="h-11 w-full">
+                    <TabsTrigger value="average" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("common.average")}</TabsTrigger>
+                    <TabsTrigger value="cgpa" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("common.cgpa")}</TabsTrigger>
                   </TabsList>
                 </Tabs>
                 <Tabs value={scope} onValueChange={(v) => setScope(v as "current" | "all")}>
-                  <TabsList className="h-8">
-                    <TabsTrigger value="current" className="text-xs">{t("dash.trendCurrent")}</TabsTrigger>
-                    <TabsTrigger value="all" className="text-xs">{t("dash.trendAll")}</TabsTrigger>
+                  <TabsList aria-label={t("dash.trendScope")} className="h-11 w-full">
+                    <TabsTrigger value="current" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("dash.trendCurrent")}</TabsTrigger>
+                    <TabsTrigger value="all" className="h-full min-w-0 flex-1 whitespace-normal px-2 text-xs leading-tight">{t("dash.trendAll")}</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
