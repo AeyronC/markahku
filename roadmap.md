@@ -1,9 +1,11 @@
 # MarkahKu roadmap
 
-- [ ] Foundation: theme, BM/EN translations, Google sign-in, profile, database, privacy rules
-- [ ] Onboarding wizard and per-Form subject lists
-- [ ] Grading rules module with tests; exam table entry and quick-add
-- [ ] Dashboard (KPIs, grade table, trend, goals), goals page, yearly view
-- [ ] Rank tracking; PDF and Excel/CSV export
-- [ ] Import wizard (Excel/CSV, photo reading) with review, duplicates, stored originals
-- [ ] AI analyst + study plan with daily caps; privacy page; download data; delete account
+Initial build (done): foundation, onboarding, grading, exams, dashboard, goals, yearly, rank, exports, import wizard, AI analyst, privacy, data download, account deletion.
+
+## Hardening pass (user brief, phase by phase, stop after each)
+- [ ] Phase A – Security audit (RLS, storage, ai_usage, server fns, delete account, keys)
+- [ ] Phase B – Grading tests + test script
+- [ ] Phase C – Import wizard completeness (PDF, CSV template, messages)
+- [ ] Phase D – Experience polish
+- [ ] Phase E – Language and accessibility audit
+- [ ] Phase F – Housekeeping (README, logging, deps, build)
