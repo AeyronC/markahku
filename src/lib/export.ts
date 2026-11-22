@@ -42,6 +42,8 @@ export function parseStatus(raw: unknown): MarkStatus | null {
   return null;
 }
 
+const MARKS_HEADER = ["Form", "Exam", "Subject", "Mark", "Status", "Academic year"];
+
 const STATUS_LABEL: Record<MarkStatus, string> = {
   completed: "Completed",
   pending: "Pending",
@@ -50,7 +52,7 @@ const STATUS_LABEL: Record<MarkStatus, string> = {
 };
 
 export function marksTable(book: Gradebook, lang: Lang) {
-  const header = ["Form", "Exam", "Subject", "Mark", "Status", "Academic year"];
+  const header = [...MARKS_HEADER];
   const rows: (string | number)[][] = [];
   const sessions = [...book.sessions].sort((a, b) => a.form - b.form || EXAM_TYPES.indexOf(a.exam) - EXAM_TYPES.indexOf(b.exam));
   for (const s of sessions) {
@@ -71,6 +73,13 @@ function download(blob: Blob, filename: string) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+export async function downloadMarksTemplate() {
+  const XLSX = await import("xlsx");
+  const ws = XLSX.utils.aoa_to_sheet([MARKS_HEADER]);
+  const csv = XLSX.utils.sheet_to_csv(ws);
+  download(new Blob(["\\uFEFF" + csv], { type: "text/csv;charset=utf-8" }), "markahku-template.csv");
 }
 
 export async function exportMarks(book: Gradebook, lang: Lang, kind: "xlsx" | "csv") {
