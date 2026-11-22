@@ -80,7 +80,7 @@ async function renderPdf(file: File): Promise<string[]> {
       canvas.height = Math.round(viewport.height);
       const context = canvas.getContext("2d");
       if (!context) throw new Error("Unable to render PDF");
-      await page.render({ canvas, canvasContext: context, viewport }).promise;
+      await page.render({ canvasContext: context, viewport }).promise;
       images.push(canvas.toDataURL("image/jpeg", 0.8));
       canvas.width = 0;
       canvas.height = 0;
