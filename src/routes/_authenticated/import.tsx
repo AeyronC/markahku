@@ -438,7 +438,7 @@ function ImportWizard() {
                   }}
                 />
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-                  <Button variant="outline" onClick={() => void downloadMarksTemplate()}>
+                  <Button variant="outline" onClick={() => void downloadMarksTemplate(lang)}>
                     <FileSpreadsheet className="size-4" /> {t("imp.template")}
                   </Button>
                   <Button variant="ghost" onClick={() => setStep(1)}>
