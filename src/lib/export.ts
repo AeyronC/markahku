@@ -42,23 +42,19 @@ export function parseStatus(raw: unknown): MarkStatus | null {
   return null;
 }
 
-const MARKS_HEADER = ["Form", "Exam", "Subject", "Mark", "Status", "Academic year"];
-
-const STATUS_LABEL: Record<MarkStatus, string> = {
-  completed: "Completed",
-  pending: "Pending",
-  exempted: "Exempted",
-  absent: "Absent",
-};
+function marksHeader(lang: Lang) {
+  const t = (key: Parameters<typeof translate>[1]) => translate(lang, key);
+  return [t("common.form"), t("common.exam"), t("common.subject"), t("common.mark"), t("common.status"), t("common.year")];
+}
 
 export function marksTable(book: Gradebook, lang: Lang) {
-  const header = [...MARKS_HEADER];
+  const header = marksHeader(lang);
   const rows: (string | number)[][] = [];
   const sessions = [...book.sessions].sort((a, b) => a.form - b.form || EXAM_TYPES.indexOf(a.exam) - EXAM_TYPES.indexOf(b.exam));
   for (const s of sessions) {
     for (const m of book.marks.filter((x) => x.session_id === s.id)) {
       const subj = book.subjects.find((x) => x.id === m.user_subject_id);
-      rows.push([s.form, EXAM_LABEL[s.exam], subjectName(subj, lang), m.mark ?? "", STATUS_LABEL[m.status], s.academic_year ?? ""]);
+      rows.push([s.form, EXAM_LABEL[s.exam], subjectName(subj, lang), m.mark ?? "", translate(lang, `status.${m.status}`), s.academic_year ?? ""]);
     }
   }
   return { header, rows };
@@ -75,9 +71,9 @@ function download(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export async function downloadMarksTemplate() {
+export async function downloadMarksTemplate(lang: Lang) {
   const XLSX = await import("xlsx");
-  const ws = XLSX.utils.aoa_to_sheet([MARKS_HEADER]);
+  const ws = XLSX.utils.aoa_to_sheet([marksHeader(lang)]);
   const csv = XLSX.utils.sheet_to_csv(ws);
   download(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }), "markahku-template.csv");
 }
@@ -92,7 +88,7 @@ export async function exportMarks(book: Gradebook, lang: Lang, kind: "xlsx" | "c
     return;
   }
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Marks");
+  XLSX.utils.book_append_sheet(wb, ws, translate(lang, "common.marks"));
   const out = XLSX.write(wb, { type: "array", bookType: "xlsx" });
   download(new Blob([out], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "markahku-marks.xlsx");
 }
