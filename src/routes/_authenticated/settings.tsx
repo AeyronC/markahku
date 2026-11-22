@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, FileSpreadsheet, Loader2, Moon, Plus, Shield, Sun, Trash2 } from "lucide-react";
+import { Check, Download, FileSpreadsheet, Loader2, Moon, Plus, Shield, Sun, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -243,6 +243,54 @@ function SettingsPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+            {subjForm >= 4 && (
+              <div className="mt-4 space-y-2 rounded-xl bg-muted/40 p-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {lang === "ms" ? "Cadangan Elektif SPM" : "Suggested SPM Electives"}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    "Matematik Tambahan",
+                    "Fizik",
+                    "Kimia",
+                    "Biologi",
+                    "Prinsip Perakaunan",
+                    "Perniagaan",
+                    "Ekonomi",
+                    "Tasawwur Islam",
+                    "Sains Komputer",
+                  ].map((name) => {
+                    const alreadyExists = formSubjects.some((s) => subjectName(s, lang).toLowerCase() === name.toLowerCase());
+                    return (
+                      <button
+                        key={name}
+                        type="button"
+                        disabled={alreadyExists}
+                        onClick={async () => {
+                          if (alreadyExists) return;
+                          try {
+                            await addCustomSubject(subjForm, name, formSubjects.length);
+                            await refreshAll();
+                            toast.success(t("common.saved"));
+                          } catch {
+                            toast.error(t("common.error"));
+                          }
+                        }}
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs transition-colors",
+                          alreadyExists
+                            ? "bg-primary/20 text-primary opacity-60 cursor-default"
+                            : "bg-muted text-foreground hover:bg-primary/15 hover:text-primary",
+                        )}
+                      >
+                        {alreadyExists ? <Check className="size-3" /> : <Plus className="size-3" />}
+                        {name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             )}
             <form

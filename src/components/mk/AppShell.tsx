@@ -189,8 +189,11 @@ export function AppShell() {
                 {t(n.label)}
               </Link>
             ))}
-            <button onClick={signOut} className="glass flex flex-col items-center gap-1.5 rounded-xl p-3 text-xs font-medium">
-              <LogOut className="size-5 text-muted-foreground" />
+            <button
+              onClick={signOut}
+              className="glass flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
+            >
+              <LogOut className="size-5 text-destructive" />
               {t("nav.signOut")}
             </button>
           </div>

@@ -247,7 +247,7 @@ function ExamEntry() {
                       </SelectContent>
                     </Select>
                     <div className="flex justify-center">
-                      <GradeBadge mark={m} />
+                      <GradeBadge mark={m} form={session.form} />
                     </div>
                     <div className="w-12 text-right font-mono text-sm tabular text-muted-foreground md:w-auto">
                       {m != null ? cgpaPoints(m).toFixed(2) : "—"}

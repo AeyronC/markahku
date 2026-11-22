@@ -20,6 +20,31 @@ describe("letter grade (KSSM)", () => {
   ])("%i → %s", (m, l) => expect(letterGrade(m)).toBe(l));
 });
 
+describe("adaptive letter grade (UASA vs SPM)", () => {
+  it("uses UASA 6-grade scale for Form 1-3", () => {
+    expect(letterGrade(95, 1)).toBe("A");
+    expect(letterGrade(85, 2)).toBe("A");
+    expect(letterGrade(75, 3)).toBe("B");
+    expect(letterGrade(65, 1)).toBe("C");
+    expect(letterGrade(55, 2)).toBe("D");
+    expect(letterGrade(42, 3)).toBe("E");
+    expect(letterGrade(35, 1)).toBe("F");
+  });
+
+  it("uses SPM 10-grade scale for Form 4-5", () => {
+    expect(letterGrade(95, 4)).toBe("A+");
+    expect(letterGrade(85, 4)).toBe("A");
+    expect(letterGrade(75, 5)).toBe("A-");
+    expect(letterGrade(68, 4)).toBe("B+");
+    expect(letterGrade(62, 5)).toBe("B");
+    expect(letterGrade(58, 4)).toBe("C+");
+    expect(letterGrade(52, 5)).toBe("C");
+    expect(letterGrade(48, 4)).toBe("D");
+    expect(letterGrade(42, 5)).toBe("E");
+    expect(letterGrade(35, 4)).toBe("G");
+  });
+});
+
 describe("CGPA points", () => {
   it.each([
     [90, 4], [100, 4], [89, 3.75], [80, 3.75], [79, 3.5], [70, 3.5], [69, 3.25], [65, 3.25],

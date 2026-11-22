@@ -5,22 +5,37 @@ import { usePrefs, useT } from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const gradeClass: Record<Letter, string> = {
+  "A+": "bg-grade-a text-grade-ink font-bold ring-1 ring-white/30",
   A: "bg-grade-a text-grade-ink",
+  "A-": "bg-grade-a text-grade-ink opacity-90",
+  "B+": "bg-grade-b text-grade-ink font-bold ring-1 ring-white/30",
   B: "bg-grade-b text-grade-ink",
+  "C+": "bg-grade-c text-grade-ink font-bold ring-1 ring-white/30",
   C: "bg-grade-c text-grade-ink",
   D: "bg-grade-d text-grade-ink",
   E: "bg-grade-e text-grade-ink",
   F: "bg-grade-f text-grade-ink",
+  G: "bg-grade-f text-grade-ink font-bold",
 };
 
-export function GradeBadge({ mark, letter, className }: { mark?: number | null; letter?: Letter; className?: string }) {
-  const l = letter ?? (mark != null ? letterGrade(mark) : null);
+export function GradeBadge({
+  mark,
+  letter,
+  form,
+  className,
+}: {
+  mark?: number | null;
+  letter?: Letter;
+  form?: number | undefined;
+  className?: string;
+}) {
+  const l = letter ?? (mark != null ? letterGrade(mark, form) : null);
   if (!l) return <span className={cn("text-muted-foreground", className)}>—</span>;
   return (
     <span
       className={cn(
         "inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 font-mono text-xs font-semibold",
-        gradeClass[l],
+        gradeClass[l] ?? "bg-muted text-muted-foreground",
         className,
       )}
     >
@@ -79,9 +94,9 @@ export function ExamSelect({ value, onChange, className }: { value: ExamType; on
 
 export function Stat({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "up" | "down" | "flat" }) {
   return (
-    <div className="glass group relative overflow-hidden rounded-[1.4rem] p-4 transition-transform duration-300 hover:-translate-y-0.5 md:p-5">
-      <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className="mt-1.5 font-display text-2xl font-semibold tabular">{value}</div>
+    <div className="glass group relative overflow-hidden rounded-[1.4rem] p-3.5 transition-transform duration-300 hover:-translate-y-0.5 sm:p-5">
+      <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div className="mt-1 font-display text-xl font-semibold tabular sm:text-2xl">{value}</div>
       {hint && (
         <div
           className={cn(
