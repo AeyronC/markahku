@@ -79,7 +79,7 @@ export async function downloadMarksTemplate() {
   const XLSX = await import("xlsx");
   const ws = XLSX.utils.aoa_to_sheet([MARKS_HEADER]);
   const csv = XLSX.utils.sheet_to_csv(ws);
-  download(new Blob(["\\uFEFF" + csv], { type: "text/csv;charset=utf-8" }), "markahku-template.csv");
+  download(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }), "markahku-template.csv");
 }
 
 export async function exportMarks(book: Gradebook, lang: Lang, kind: "xlsx" | "csv") {
