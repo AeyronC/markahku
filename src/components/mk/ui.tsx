@@ -94,7 +94,7 @@ export function ExamSelect({ value, onChange, className }: { value: ExamType; on
 
 export function Stat({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "up" | "down" | "flat" }) {
   return (
-    <div className="glass group relative overflow-hidden rounded-[1.4rem] p-3.5 transition-transform duration-300 hover:-translate-y-0.5 sm:p-5">
+    <div className="glass group relative overflow-hidden rounded-xl p-3.5 transition-transform duration-300 hover:-translate-y-0.5 sm:p-5">
       <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="mt-1 font-display text-xl font-semibold tabular sm:text-2xl">{value}</div>
       {hint && (
@@ -153,7 +153,7 @@ export function LangToggle({ onChange }: { onChange?: (l: "ms" | "en") => void }
 export function Logo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <div className="bg-gradient-primary flex size-8 items-center justify-center rounded-xl font-display text-sm font-bold text-primary-foreground shadow-glow">
+      <div className="bg-gradient-primary flex size-8 items-center justify-center rounded-lg font-display text-sm font-bold text-primary-foreground">
         M
       </div>
       <span className="font-display text-lg font-semibold tracking-tight">
