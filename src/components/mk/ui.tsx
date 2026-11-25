@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { EXAM_TYPES, FORMS, letterGrade, type ExamType, type Letter } from "@/lib/grading";
 import { usePrefs, useT } from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const gradeClass: Record<Letter, string> = {
   "A+": "bg-grade-a text-grade-ink font-bold ring-1 ring-white/30",
@@ -128,23 +129,25 @@ export function LangToggle({ onChange }: { onChange?: (l: "ms" | "en") => void }
   const { lang, setLang } = usePrefs();
   const t = useT();
   return (
-    <div className="glass inline-flex min-h-12 rounded-full p-1 text-xs font-semibold" role="group" aria-label={t("common.language")}>
+    <div className="inline-flex h-9 shrink-0 items-center rounded-md border border-border bg-muted/40 p-0.5 text-xs font-semibold" role="group" aria-label={t("common.language")}>
       {(["ms", "en"] as const).map((l) => (
-        <button
+        <Button
           key={l}
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => {
             setLang(l);
             onChange?.(l);
           }}
           className={cn(
-            "min-h-10 min-w-12 rounded-full px-3 py-1 transition-all",
-            lang === l ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+            "h-7 min-w-9 rounded-sm px-2 text-xs transition-colors",
+            lang === l ? "bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent" : "text-muted-foreground hover:text-foreground",
           )}
           aria-pressed={lang === l}
         >
           {l === "ms" ? "BM" : "EN"}
-        </button>
+        </Button>
       ))}
     </div>
   );

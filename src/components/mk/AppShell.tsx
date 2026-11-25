@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import {
+  ArrowUpRight,
   CalendarRange,
   ClipboardList,
   Goal,
@@ -126,103 +127,52 @@ export function AppShell() {
 
   return (
     <div className="min-h-screen md:pl-60">
-      <aside className="glass-strong fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-y-0 border-l-0 border-r border-sidebar-border bg-sidebar/80 p-4 backdrop-blur-2xl md:flex">
-        <Link to="/dashboard" className="mb-8 px-2 pt-1">
-          <Logo className="[&>div]:shadow-glow" />
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-sidebar-border bg-sidebar px-3 pb-4 pt-6 md:flex">
+        <Link to="/dashboard" className="mb-7 flex min-h-10 items-center px-3" aria-label="MarkahKu">
+          <Logo />
         </Link>
-        <div className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          {t("nav.main")}
-        </div>
-        <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
-          {NAV.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={cn(
-                "flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
-                isActive(item.to)
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm ring-1 ring-white/10"
-                  : "text-sidebar-foreground/75 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
-              )}
+        <div className="mb-3 px-3 text-xs font-medium text-muted-foreground">{t("nav.main")}</div>
+        <nav aria-label={t("nav.main")} className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
+          {NAV.filter((item) => item.to !== "/settings").map((item) => (
+            <Link key={item.to} to={item.to} aria-current={isActive(item.to) ? "page" : undefined}
+              className={cn("group flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                isActive(item.to) ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/70 hover:bg-muted hover:text-sidebar-foreground")}
             >
-              <item.icon className="size-4 shrink-0" />
-              <span className="truncate">{t(item.label)}</span>
+              <item.icon className={cn("size-[18px] shrink-0", isActive(item.to) && "text-primary")} />
+              <span className="min-w-0 flex-1">{t(item.label)}</span>
+              {isActive(item.to) && <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-primary" />}
             </Link>
           ))}
         </nav>
-
-        <div className="mt-4 space-y-3 border-t border-sidebar-border pt-4">
-          <StudentBadge profile={profile} compact />
-          <div className="flex items-center justify-between gap-2">
-            <LangToggle onChange={onLang} />
-            <Button
-              type="button"
-              variant="glass"
-              size="icon"
-              aria-label={`${t("common.theme")}: ${themeLabel}`}
-              title={`${t("common.theme")}: ${themeLabel}`}
-              onClick={() => onTheme(theme === "dark" ? "light" : "dark")}
-            >
-              {theme === "dark" ? <Sun /> : <Moon />}
-            </Button>
-          </div>
-          <Link
-            to="/privacy"
-            className="flex min-h-10 items-center gap-2 rounded-xl px-3 text-xs text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground"
-          >
-            <Shield className="size-4" />
-            {t("nav.privacy")}
+        <div className="mt-5 space-y-1 border-t border-sidebar-border pt-3">
+          <Link to="/settings" aria-current={isActive("/settings") ? "page" : undefined} className={cn("flex min-h-10 items-center gap-3 rounded-md px-3 text-sm transition-colors", isActive("/settings") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
+            <Settings className="size-[18px]" />{t("nav.settings")}
           </Link>
-          <button
-            type="button"
-            onClick={() => setSignOutOpen(true)}
-            className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-          >
-            <LogOut className="size-4" />
-            {t("nav.signOut")}
-          </button>
+          <Link to="/privacy" aria-current={isActive("/privacy") ? "page" : undefined} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">
+            <Shield className="size-[18px]" />{t("nav.privacy")}
+          </Link>
+          <Button type="button" variant="ghost" onClick={() => setSignOutOpen(true)} className="min-h-10 w-full justify-start gap-3 px-3 font-normal text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
+            <LogOut className="size-[18px]" />{t("nav.signOut")}
+          </Button>
         </div>
+        <Link to="/settings" className="mt-4 block rounded-md border border-sidebar-border bg-muted/30 p-3 transition-colors hover:bg-muted">
+          <StudentBadge profile={profile} compact />
+        </Link>
       </aside>
 
-      <header className="glass-strong sticky top-0 z-30 flex flex-col gap-3 rounded-none border-x-0 border-t-0 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:flex-row md:items-center md:justify-between md:px-8 md:py-3">
-        <div className="flex items-center justify-between gap-3">
-          <Link to="/dashboard" className="md:hidden">
-            <Logo className="[&>div]:shadow-glow" />
-          </Link>
-          <div className="hidden md:block">
-            <StudentBadge profile={profile} />
-          </div>
-          <div className="flex items-center gap-2 md:ml-auto">
-            <div className="md:hidden">
-              <LangToggle onChange={onLang} />
-            </div>
-            <Button
-              type="button"
-              variant="glass"
-              size="icon"
-              className="md:hidden"
-              aria-label={`${t("common.theme")}: ${themeLabel}`}
-              title={`${t("common.theme")}: ${themeLabel}`}
-              onClick={() => onTheme(theme === "dark" ? "light" : "dark")}
-            >
-              {theme === "dark" ? <Sun /> : <Moon />}
-            </Button>
+      <header className="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-3 border-b border-border bg-background/95 px-4 pt-[env(safe-area-inset-top)] md:px-8 lg:px-10">
+        <div className="flex min-w-0 items-center gap-3">
+          <Button type="button" variant="ghost" size="icon" className="shrink-0 md:hidden" onClick={() => setMoreOpen(true)} aria-label={t("nav.main")} aria-expanded={moreOpen}><Menu /></Button>
+          <Link to="/dashboard" className="md:hidden"><Logo /></Link>
+          <div className="hidden min-w-0 items-center gap-2 text-sm md:flex">
+            <span className="text-muted-foreground">MarkahKu</span><span aria-hidden="true" className="text-muted-foreground/50">/</span>
+            <span className="truncate font-medium">{t(NAV.find((item) => isActive(item.to))?.label ?? "nav.dashboard")}</span>
           </div>
         </div>
-        <div className="md:hidden">
-          <StudentBadge profile={profile} compact />
-        </div>
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="flex shrink-0 items-center gap-2">
           <LangToggle onChange={onLang} />
-          <Button
-            type="button"
-            variant="glass"
-            size="icon"
-            aria-label={`${t("common.theme")}: ${themeLabel}`}
-            title={`${t("common.theme")}: ${themeLabel}`}
-            onClick={() => onTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {theme === "dark" ? <Sun /> : <Moon />}
+          <Button type="button" variant="ghost" size="icon" className="size-9" aria-label={`${t("common.theme")}: ${themeLabel}`} title={`${t("common.theme")}: ${themeLabel}`} onClick={() => onTheme(theme === "dark" ? "light" : "dark")}>
+            {theme === "dark" ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
           </Button>
         </div>
       </header>
@@ -233,70 +183,48 @@ export function AppShell() {
         </div>
       </main>
 
-      <nav aria-label={t("nav.main")} className="glass-strong fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-40 flex w-[calc(100%-1.5rem)] max-w-[30rem] -translate-x-1/2 justify-around rounded-full px-2 py-1.5 md:hidden">
+      <nav aria-label={t("nav.main")} className="fixed inset-x-0 bottom-0 z-40 flex min-h-16 items-stretch border-t border-border bg-sidebar px-2 pb-[env(safe-area-inset-bottom)] md:hidden">
         {TABS.map((to) => {
-          const item = NAV.find((entry) => entry.to === to)!;
+          const item = NAV.find((entry) => entry.to === to);
+          if (!item) return null;
           const active = isActive(to);
           return (
-            <Link
-              key={to}
-              to={to}
-              aria-current={active ? "page" : undefined}
-              className={cn(
-                "flex min-h-12 flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-1 py-1.5 text-[10px] font-semibold transition-colors",
-                active ? "bg-primary/15 text-primary" : "text-muted-foreground",
-              )}
-            >
-              <item.icon className="size-5" />
-              <span className="max-w-full truncate">{t(item.label)}</span>
+            <Link key={to} to={to} aria-current={active ? "page" : undefined} className={cn("relative flex min-h-16 min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 py-2 text-[10px] font-medium transition-colors", active ? "text-primary" : "text-muted-foreground hover:text-foreground")}>
+              {active && <span aria-hidden="true" className="absolute inset-x-4 top-0 h-0.5 rounded-full bg-primary" />}
+              <item.icon className="size-5 shrink-0" /><span className="max-w-full truncate">{t(item.label)}</span>
             </Link>
           );
         })}
-        <button
-          type="button"
-          onClick={() => setMoreOpen(true)}
-          className="flex min-h-12 flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-1 py-1.5 text-[10px] font-semibold text-muted-foreground transition-colors hover:bg-white/5"
-          aria-expanded={moreOpen}
-        >
-          <Menu className="size-5" />
-          <span>{t("nav.more")}</span>
-        </button>
+        <Button type="button" variant="ghost" onClick={() => setMoreOpen(true)} className="h-auto min-h-16 min-w-0 flex-1 flex-col gap-1 rounded-none px-1 py-2 text-[10px] font-medium text-muted-foreground" aria-expanded={moreOpen}>
+          <Menu className="size-5" /><span>{t("nav.more")}</span>
+        </Button>
       </nav>
 
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent side="bottom" className="glass-strong max-h-[88svh] overflow-y-auto rounded-t-[2rem] border-x-0 border-b-0 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
-          <SheetHeader>
-            <SheetTitle>{t("nav.more")}</SheetTitle>
+        <SheetContent side="left" className="flex w-[min(20rem,88vw)] flex-col gap-0 border-sidebar-border bg-sidebar p-0">
+          <SheetHeader className="border-b border-sidebar-border px-5 pb-5 pt-6 text-left">
+            <Logo /><SheetTitle className="mt-3 text-sm font-medium text-muted-foreground">{t("nav.main")}</SheetTitle>
           </SheetHeader>
-          <div className="grid grid-cols-3 gap-2 p-4 pt-0">
-            {[...NAV.filter((item) => !TABS.includes(item.to)), { to: "/privacy" as AppPath, label: "nav.privacy" as DictKey, icon: Shield } satisfies NavItem].map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setMoreOpen(false)}
-                className="glass flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-xs font-medium transition-colors hover:bg-white/10"
-              >
-                <item.icon className="size-5 text-primary" />
-                <span className="text-center">{t(item.label)}</span>
+          <nav aria-label={t("nav.more")} className="min-h-0 flex-1 space-y-1 overflow-y-auto p-3">
+            {[...NAV, { to: "/privacy" as AppPath, label: "nav.privacy" as DictKey, icon: Shield } satisfies NavItem].map((item) => (
+              <Link key={item.to} to={item.to} onClick={() => setMoreOpen(false)} aria-current={isActive(item.to) ? "page" : undefined}
+                className={cn("flex min-h-11 items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium", isActive(item.to) ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/75 hover:bg-muted hover:text-foreground")}>
+                <item.icon className="size-[18px] shrink-0" /><span className="min-w-0 flex-1">{t(item.label)}</span>
+                {isActive(item.to) && <ArrowUpRight aria-hidden="true" className="size-4 text-primary" />}
               </Link>
             ))}
-            <button
-              type="button"
-              onClick={() => {
-                setMoreOpen(false);
-                setSignOutOpen(true);
-              }}
-              className="glass flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
-            >
-              <LogOut className="size-5" />
-              {t("nav.signOut")}
-            </button>
+          </nav>
+          <div className="space-y-3 border-t border-sidebar-border p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+            <StudentBadge profile={profile} compact />
+            <Button type="button" variant="ghost" className="w-full justify-start gap-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" onClick={() => { setMoreOpen(false); setSignOutOpen(true); }}>
+              <LogOut />{t("nav.signOut")}
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
 
       <AlertDialog open={signOutOpen} onOpenChange={setSignOutOpen}>
-        <AlertDialogContent className="glass-strong rounded-3xl">
+        <AlertDialogContent className="rounded-lg">
           <AlertDialogHeader>
             <AlertDialogTitle>{t("nav.signOutTitle")}</AlertDialogTitle>
             <AlertDialogDescription>{t("nav.signOutHint")}</AlertDialogDescription>
@@ -333,14 +261,14 @@ function StudentBadge({ profile, compact = false }: { profile: Profile | null | 
   const school = profile?.school?.trim();
 
   return (
-    <div className={cn("flex min-w-0 items-center gap-3", compact && "rounded-2xl border border-border/60 bg-muted/30 p-2.5")}>
-      <Avatar className="size-10 ring-2 ring-primary/20">
-        <AvatarFallback className="bg-gradient-primary font-display text-xs font-bold text-primary-foreground">{initials}</AvatarFallback>
+    <div className={cn("flex min-w-0 items-center gap-3", compact && "gap-2.5")}>
+      <Avatar className="size-9 shrink-0 rounded-md">
+        <AvatarFallback className="rounded-md bg-primary/15 font-display text-xs font-semibold text-primary">{initials}</AvatarFallback>
       </Avatar>
       <div className="min-w-0 flex-1">
         <div className="truncate text-sm font-semibold">{name}</div>
         <div className="mt-0.5 flex min-w-0 items-center gap-2">
-          <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+          <span className="shrink-0 text-[10px] font-medium text-muted-foreground">
             {t("common.formN", { n: form })}
           </span>
           {school && <span className="truncate text-xs text-muted-foreground">{school}</span>}

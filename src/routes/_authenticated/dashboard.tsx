@@ -35,11 +35,10 @@ import {
 } from "@/lib/grading";
 import {
   hasAnyMarks,
-  latestCountedMark,
   useGradebook,
   useProfile,
 } from "@/lib/gradebook";
-import { examChange, examSummary, latestExamWithData } from "@/lib/book-derived";
+import { examChange, examSummary, latestExamWithData, latestCountedMark } from "@/lib/book-derived";
 import { examHistory, focusAreas, subjectHighlights, subjectSeries } from "@/lib/dashboard-derived";
 import {
   dateFor,
@@ -51,6 +50,7 @@ import {
   type SavedExamDates,
 } from "@/lib/exam-dates";
 import { exportExamPdf } from "@/lib/export";
+import { DashboardHeader } from "@/components/mk/DashboardHeader";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -203,56 +203,15 @@ function Dashboard() {
 
   return (
     <>
-      <section className="relative isolate mb-6 overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-5 shadow-glass sm:p-7 lg:p-8">
-        <div className="pointer-events-none absolute -right-16 -top-20 size-64 rounded-full bg-primary/15 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 right-1/4 size-56 rounded-full bg-cyan-400/10 blur-3xl" />
-        <svg aria-hidden="true" className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-[38%] text-primary/20 md:block" viewBox="0 0 360 180" fill="none" preserveAspectRatio="xMaxYMax meet">
-          <path d="M18 180V95h28v85M58 180V68h38v112M104 180V110h26v70M140 180V42h42v138M190 180V86h30v94M228 180V58h48v122M284 180V102h30v78M322 180V74h22v106" stroke="currentColor" strokeWidth="2" />
-          <path d="M14 136h338M14 158h338M140 62h42M228 80h48" stroke="currentColor" strokeWidth="1" strokeDasharray="4 8" />
-          <circle cx="160" cy="52" r="28" stroke="currentColor" strokeWidth="1" />
-        </svg>
-        <div className="relative z-10">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-muted-foreground">{t("common.year")} · {new Date().getFullYear()}</p>
-              <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                {profile?.display_name?.trim()
-                  ? t("dash.welcome", { name: profile.display_name.trim() })
-                  : t("dash.welcomeNoName")}
-              </h1>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary">
-                  <span className="size-1.5 rounded-full bg-primary" />
-                  {t("common.formN", { n: currentForm })}
-                </span>
-                {profile?.school && (
-                  <span className="max-w-full truncate rounded-full border border-border/70 bg-background/35 px-3 py-1.5 text-xs text-muted-foreground">
-                    {profile.school}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <FormSelect value={form} onChange={setForm} />
-              <ExamSelect value={exam} onChange={setExam} />
-              <Button
-                variant="outline"
-                onClick={() => exportExamPdf(book, form, exam, lang)}
-                disabled={summary.counted === 0}
-              >
-                <Download />
-                {t("common.exportPdf")}
-              </Button>
-              <Button asChild variant="hero">
-                <Link to="/quick-add">
-                  <ClipboardList />
-                  {t("dash.enterMarks")}
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DashboardHeader
+        profile={profile}
+        form={currentForm}
+        filters={<><FormSelect value={form} onChange={setForm} /><ExamSelect value={exam} onChange={setExam} /></>}
+        actions={<>
+          <Button asChild><Link to="/quick-add"><ClipboardList />{t("dash.enterMarks")}</Link></Button>
+          <Button variant="outline" onClick={() => exportExamPdf(book, form, exam, lang)} disabled={summary.counted === 0}><Download />{t("common.exportPdf")}</Button>
+        </>}
+      />
 
       {empty ? (
         <Card className="relative overflow-hidden rounded-3xl border-primary/20">

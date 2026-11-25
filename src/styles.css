@@ -238,11 +238,36 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
   :where(a, button, input, select, textarea, [role="tab"], [role="switch"], [role="combobox"], [tabindex]):focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
+  }
+}
+
+.dashboard-welcome {
+  min-height: 248px;
+}
+.dashboard-skyline {
+  opacity: 0.6;
+}
+.dashboard-skyline-shade {
+  background: linear-gradient(90deg, var(--background) 0%, color-mix(in oklab, var(--background) 94%, transparent) 28%, color-mix(in oklab, var(--background) 48%, transparent) 58%, transparent 100%);
+}
+.light .dashboard-skyline {
+  opacity: 0.22;
+}
+.light .dashboard-skyline-shade {
+  background: linear-gradient(90deg, var(--background) 0%, color-mix(in oklab, var(--background) 94%, transparent) 30%, color-mix(in oklab, var(--background) 64%, transparent) 60%, transparent 100%);
+}
+@media (max-width: 767px) {
+  .dashboard-skyline {
+    object-position: 72% center;
+    opacity: 0.35;
+  }
+  .dashboard-skyline-shade {
+    background: linear-gradient(90deg, var(--background), color-mix(in oklab, var(--background) 80%, transparent) 45%, color-mix(in oklab, var(--background) 30%, transparent));
   }
 }
 

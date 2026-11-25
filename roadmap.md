@@ -9,3 +9,8 @@ Initial build (done): foundation, onboarding, grading, exams, dashboard, goals, 
 - [x] Phase D – Experience polish
 - [x] Phase E – Language and accessibility audit
 - [ ] Phase F – Housekeeping (README, logging, deps, build)
+
+## Dashboard redesign — current request
+- [x] New desktop side menu and mobile menu
+- [x] Dashboard welcome header with KL skyline
+- [x] Signed-in browser verification on desktop and mobile
