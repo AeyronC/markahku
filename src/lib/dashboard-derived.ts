@@ -26,9 +26,10 @@ export function subjectHighlights(book: Gradebook, form: number, exam: ExamType,
 /** Subjects within 3 marks of the next letter grade, closest first. */
 export function focusAreas(book: Gradebook, form: number, exam: ExamType, lang: Lang) {
   return countedMarks(book, form, exam, lang)
-    .map((s) => ({ ...s, next: nextLetterBoundary(s.mark, form) }))
-    .filter((s) => s.next && s.next.marksNeeded <= 3)
-    .map((s) => ({ name: s.name, mark: s.mark, letter: s.next!.letter, marksNeeded: s.next!.marksNeeded }))
+    .flatMap((s) => {
+      const next = nextLetterBoundary(s.mark, form);
+      return next && next.marksNeeded <= 3 ? [{ name: s.name, mark: s.mark, letter: next.letter, marksNeeded: next.marksNeeded }] : [];
+    })
     .sort((a, b) => a.marksNeeded - b.marksNeeded);
 }
 
@@ -37,9 +38,10 @@ export function subjectSeries(book: Gradebook, form: number, lang: Lang, short: 
   const sids = EXAM_TYPES.map((e) => sessionFor(book, form, e)?.id);
   return subjectsForForm(book, form)
     .map((s) => {
+      const full = subjectName(s, lang);
       const row: { name: string; full: string } & Partial<Record<ExamType, number | null>> = {
-        name: short(subjectName(s, lang)),
-        full: subjectName(s, lang),
+        name: short(full),
+        full,
       };
       EXAM_TYPES.forEach((e, i) => {
         const entry = markFor(book, sids[i], s.id);

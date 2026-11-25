@@ -19,9 +19,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ExamSelect, FormSelect } from "@/components/mk/ui";
+import { ExamSelect, FormSelect, GradeBadge } from "@/components/mk/ui";
 import { cn } from "@/lib/utils";
-import { GradeBadge } from "@/components/mk/ui";
 import { usePrefs, useT } from "@/lib/i18n";
 import {
   EXAM_TYPES,
@@ -71,6 +70,7 @@ const EXAM_COLORS: Record<ExamType, string> = {
   sumatif_2: "bg-cyan-400",
   uasa: "bg-primary",
 };
+const EXAM_SHORT: Record<ExamType, string> = { sumatif_1: "S1", sumatif_2: "S2", uasa: "UASA" };
 
 function Dashboard() {
   const t = useT();
@@ -144,7 +144,7 @@ function Dashboard() {
     withMarks,
   });
   const dateForm = upcoming?.form ?? currentForm;
-  const dateYear = dateForm === currentForm ? Number(today.slice(0, 4)) : Number(today.slice(0, 4)) + 1;
+  const dateYear = Number(today.slice(0, 4)) + (dateForm === currentForm ? 0 : 1);
   const series = subjectSeries(book, form, lang, (name) => name.length > 14 ? `${name.slice(0, 13)}…` : name);
   const subjectGoalRows = book.goals
     .filter((goal) => goal.form === form && goal.scope === "subject" && goal.target_grade)
@@ -159,13 +159,10 @@ function Dashboard() {
   const cgpaProgress = targetCgpa == null ? null : examGoalProgress(summary.cgpa, targetCgpa);
   const studySubject = highlights.worst?.name ?? highlights.best?.name ?? t("common.subject");
   const studyTasks = [
-    focus[0]
-      ? { id: "focus", label: t("dash.studyFocus", { subject: focus[0].name, grade: focus[0].letter }) }
-      : { id: "focus", label: t("dash.studyReview", { subject: studySubject }) },
+    { id: "focus", label: focus[0] ? t("dash.studyFocus", { subject: focus[0].name, grade: focus[0].letter }) : t("dash.studyReview", { subject: studySubject }) },
     { id: "practice", label: t("dash.studyPractice", { subject: studySubject }) },
     { id: "explain", label: t("dash.studyExplain", { subject: studySubject }) },
   ];
-  const taskCount = studyTasks.length;
   const doneCount = studyTasks.filter((task) => completedTasks[task.id]).length;
 
   const toggleTask = (id: string, checked: boolean) => {
@@ -359,10 +356,9 @@ function Dashboard() {
                   <CardDescription className="mt-1">{t("common.formN", { n: form })}</CardDescription>
                 </div>
                 <div className="flex flex-wrap gap-1 rounded-full border border-border/70 bg-background/30 p-1" role="group" aria-label={t("dash.compareFilter")}>
-                  <CompareFilter active={compareExam === "all"} label={t("common.all")} onClick={() => setCompareExam("all")} />
-                  <CompareFilter active={compareExam === "sumatif_1"} label="S1" onClick={() => setCompareExam("sumatif_1")} />
-                  <CompareFilter active={compareExam === "sumatif_2"} label="S2" onClick={() => setCompareExam("sumatif_2")} />
-                  <CompareFilter active={compareExam === "uasa"} label="UASA" onClick={() => setCompareExam("uasa")} />
+                  {(["all", ...EXAM_TYPES] as const).map((option) => (
+                    <CompareFilter key={option} active={compareExam === option} label={option === "all" ? t("common.all") : EXAM_SHORT[option]} onClick={() => setCompareExam(option)} />
+                  ))}
                 </div>
               </CardHeader>
               <CardContent>
@@ -374,7 +370,7 @@ function Dashboard() {
                       {EXAM_TYPES.map((type) => (
                         <span key={type} className="inline-flex items-center gap-1.5">
                           <span className={cn("size-2 rounded-full", EXAM_COLORS[type])} />
-                          {type === "sumatif_1" ? "S1" : type === "sumatif_2" ? "S2" : "UASA"}
+                          {EXAM_SHORT[type]}
                         </span>
                       ))}
                     </div>
@@ -387,7 +383,7 @@ function Dashboard() {
                               const mark = row[type];
                               return (
                                 <div key={type} className="flex items-center gap-2">
-                                  <span className="w-7 shrink-0 text-[10px] text-muted-foreground">{type === "sumatif_1" ? "S1" : type === "sumatif_2" ? "S2" : "UASA"}</span>
+                                  <span className="w-7 shrink-0 text-[10px] text-muted-foreground">{EXAM_SHORT[type]}</span>
                                   <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted/70">
                                     <div className={cn("h-full rounded-full transition-[width]", EXAM_COLORS[type])} style={{ width: `${Math.max(0, Math.min(100, mark ?? 0))}%` }} />
                                   </div>
@@ -522,7 +518,7 @@ function Dashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>{t("dash.tasks")}</CardTitle>
-                <CardDescription>{t("dash.tasksDone", { d: doneCount, n: taskCount })}</CardDescription>
+                <CardDescription>{t("dash.tasksDone", { d: doneCount, n: studyTasks.length })}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 {studyTasks.map((task) => (

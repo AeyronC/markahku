@@ -85,17 +85,17 @@ export function AppShell() {
     }
   }, [profile, setLang, setTheme]);
 
-  const onLang = (language: "ms" | "en") => {
-    void updateProfile({ language }).then(() => qc.invalidateQueries({ queryKey: ["profile"] })).catch(() => {
+  const saveProfile = (patch: Parameters<typeof updateProfile>[0]) => {
+    void updateProfile(patch).then(() => qc.invalidateQueries({ queryKey: ["profile"] })).catch(() => {
       toast.error(t("common.error"));
     });
   };
 
+  const onLang = (language: "ms" | "en") => saveProfile({ language });
+
   const onTheme = (nextTheme: "dark" | "light") => {
     setTheme(nextTheme);
-    void updateProfile({ theme: nextTheme }).then(() => qc.invalidateQueries({ queryKey: ["profile"] })).catch(() => {
-      toast.error(t("common.error"));
-    });
+    saveProfile({ theme: nextTheme });
   };
 
   async function confirmSignOut() {
@@ -156,7 +156,7 @@ export function AppShell() {
           </Button>
         </div>
         <Link to="/settings" className="mt-4 block rounded-md border border-sidebar-border bg-muted/30 p-3 transition-colors hover:bg-muted">
-          <StudentBadge profile={profile} compact />
+          <StudentBadge profile={profile} />
         </Link>
       </aside>
 
@@ -215,7 +215,7 @@ export function AppShell() {
             ))}
           </nav>
           <div className="space-y-3 border-t border-sidebar-border p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-            <StudentBadge profile={profile} compact />
+            <StudentBadge profile={profile} />
             <Button type="button" variant="ghost" className="w-full justify-start gap-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" onClick={() => { setMoreOpen(false); setSignOutOpen(true); }}>
               <LogOut />{t("nav.signOut")}
             </Button>
@@ -248,7 +248,7 @@ export function AppShell() {
   );
 }
 
-function StudentBadge({ profile, compact = false }: { profile: Profile | null | undefined; compact?: boolean }) {
+function StudentBadge({ profile }: { profile: Profile | null | undefined }) {
   const t = useT();
   const name = profile?.display_name?.trim() || t("nav.student");
   const initials = name
@@ -261,7 +261,7 @@ function StudentBadge({ profile, compact = false }: { profile: Profile | null | 
   const school = profile?.school?.trim();
 
   return (
-    <div className={cn("flex min-w-0 items-center gap-3", compact && "gap-2.5")}>
+    <div className="flex min-w-0 items-center gap-2.5">
       <Avatar className="size-9 shrink-0 rounded-md">
         <AvatarFallback className="rounded-md bg-primary/15 font-display text-xs font-semibold text-primary">{initials}</AvatarFallback>
       </Avatar>
