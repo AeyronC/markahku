@@ -35,6 +35,7 @@ import { ocrMarks } from "@/lib/ai.functions";
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
 export const Route = createFileRoute("/_authenticated/import")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Import keputusan · Import results — MarkahKu" },

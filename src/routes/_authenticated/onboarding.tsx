@@ -15,6 +15,7 @@ import { currentUserId, updateProfile, useCatalog, useProfile } from "@/lib/grad
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Mula · Get started — MarkahKu" },

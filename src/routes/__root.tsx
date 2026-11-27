@@ -74,9 +74,11 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
+      { name: "google-site-verification", content: "lV7QkK6FWmm2Lg87LlJDfEBfYnKNwb8vUcV5Y-y7IFU" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "MarkahKu — Penjejak gred pelajar" },
       { name: "description", content: "Private BM/English grade tracker for Malaysian Form 1–5 students." },

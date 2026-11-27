@@ -37,6 +37,7 @@ import { downloadJson, exportMarks } from "@/lib/export";
 import { deleteAccount } from "@/lib/account.functions";
 
 export const Route = createFileRoute("/_authenticated/settings")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Tetapan · Settings — MarkahKu" },

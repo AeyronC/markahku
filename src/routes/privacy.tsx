@@ -4,6 +4,7 @@ import { useT } from "@/lib/i18n";
 import { LangToggle, Logo } from "@/components/mk/ui";
 
 export const Route = createFileRoute("/privacy")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Privasi · Privacy — MarkahKu" },

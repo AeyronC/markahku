@@ -4,6 +4,7 @@ import { profileQuery } from "@/lib/gradebook";
 import { AppShell } from "@/components/mk/AppShell";
 
 export const Route = createFileRoute("/_authenticated")({
+  staticData: { sitemap: "exclude-subtree" },
   ssr: false,
   beforeLoad: async ({ context, location }) => {
     const { data } = await supabase.auth.getUser();

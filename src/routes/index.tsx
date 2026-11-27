@@ -8,6 +8,7 @@ import { useT } from "@/lib/i18n";
 import { cgpaPoints, formatAverage, formatCgpa, summarizeExam } from "@/lib/grading";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "MarkahKu — Jejak markah, gred & CGPA anda" },

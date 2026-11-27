@@ -22,6 +22,7 @@ import { examSummary } from "@/lib/book-derived";
 import { exportYearPdf } from "@/lib/export";
 
 export const Route = createFileRoute("/_authenticated/yearly")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Tahunan · Yearly — MarkahKu" },

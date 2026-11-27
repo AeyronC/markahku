@@ -14,3 +14,9 @@ Initial build (done): foundation, onboarding, grading, exams, dashboard, goals, 
 - [x] New desktop side menu and mobile menu
 - [x] Dashboard welcome header with KL skyline
 - [x] Signed-in browser verification on desktop and mobile
+
+## Google Search Console setup
+- [x] Check connected Google account and property access
+- [x] Add root verification tag and public-page sitemap
+- [ ] Publish required changes with approval
+- [ ] Verify ownership, add property, and submit live sitemap

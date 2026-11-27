@@ -17,6 +17,7 @@ import { currentUserId, subjectName, subjectsForForm, useGradebook, useProfile, 
 import { latestCountedMark } from "@/lib/book-derived";
 
 export const Route = createFileRoute("/_authenticated/goals")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Sasaran · Goals — MarkahKu" },

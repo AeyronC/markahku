@@ -52,6 +52,7 @@ import { exportExamPdf } from "@/lib/export";
 import { DashboardHeader } from "@/components/mk/DashboardHeader";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Papan pemuka · Dashboard — MarkahKu" },

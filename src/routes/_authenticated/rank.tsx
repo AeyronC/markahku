@@ -10,6 +10,7 @@ import { useGradebook } from "@/lib/gradebook";
 import { EXAM_LABEL } from "@/lib/export";
 
 export const Route = createFileRoute("/_authenticated/rank")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Kedudukan · Rank — MarkahKu" },

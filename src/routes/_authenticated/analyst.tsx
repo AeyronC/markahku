@@ -16,6 +16,7 @@ import { buildAnalystSummary } from "@/lib/analyst-summary";
 import { runAnalyst } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/_authenticated/analyst")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Penganalisis AI · AI analyst — MarkahKu" },

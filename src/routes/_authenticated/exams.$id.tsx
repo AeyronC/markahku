@@ -29,6 +29,7 @@ import { examChange } from "@/lib/book-derived";
 import { exportExamPdf } from "@/lib/export";
 
 export const Route = createFileRoute("/_authenticated/exams/$id")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Masukkan markah · Enter marks — MarkahKu" },

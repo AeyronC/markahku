@@ -31,3 +31,5 @@ use the editor.
 
 - Keep the authenticated navigation in AppShell and the skyline welcome area in DashboardHeader; separate presentation from the existing dashboard calculations.
 - Store dashboard artwork as CDN asset pointers; this keeps image files out of the repository.
+
+- Derive sitemap URLs from required route-level sitemap decisions and exclude authenticated subtrees; never expose student records or invent lastmod timestamps.

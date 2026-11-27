@@ -14,6 +14,7 @@ import { MARK_STATUSES, cgpaPoints, effectiveMark, normalizeEntry, parseMarkInpu
 import { ensureFormSubjects, ensureSession, saveMarks, subjectName, subjectsForForm, useGradebook, useProfile } from "@/lib/gradebook";
 
 export const Route = createFileRoute("/_authenticated/quick-add")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Tambah pantas · Quick add — MarkahKu" },

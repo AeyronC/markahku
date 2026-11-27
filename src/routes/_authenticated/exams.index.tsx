@@ -12,6 +12,7 @@ import { examSummary } from "@/lib/book-derived";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/exams/")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Peperiksaan · Exams — MarkahKu" },
