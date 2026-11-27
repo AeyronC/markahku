@@ -18,5 +18,5 @@ Initial build (done): foundation, onboarding, grading, exams, dashboard, goals, 
 ## Google Search Console setup
 - [x] Check connected Google account and property access
 - [x] Add root verification tag and public-page sitemap
-- [ ] Publish required changes with approval
-- [ ] Verify ownership, add property, and submit live sitemap
+- [x] Publish required changes and confirm live verification tag and sitemap
+- [x] Verify ownership, add property, and submit live sitemap
