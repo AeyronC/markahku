@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 import { MapPin } from "lucide-react";
-import skyline from "@/assets/kl-skyline.webp.asset.json";
+import skylineNight from "@/assets/kl-skyline.webp.asset.json";
 import { useT } from "@/lib/i18n";
 import type { Profile } from "@/lib/gradebook";
+
+const SKYLINE_ALT = "KLCC Petronas Twin Towers";
 
 export function DashboardHeader({ profile, form, actions, filters }: {
   profile: Profile | null | undefined;
@@ -16,7 +18,10 @@ export function DashboardHeader({ profile, form, actions, filters }: {
   return (
     <section className="mb-7" aria-label={t("dash.title")}>
       <div className="dashboard-welcome relative isolate overflow-hidden border-b border-border pb-7 pt-2 sm:pb-8">
-        <img src={skyline.url} alt="" aria-hidden="true" fetchPriority="high" className="dashboard-skyline pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover object-right" />
+        {/* Night skyline (dark mode — default, hidden in .light) */}
+        <img src={skylineNight.url} alt={SKYLINE_ALT} fetchPriority="high" className="dashboard-skyline dashboard-skyline--night pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover object-right" />
+        {/* Day skyline (light mode — hidden by default, shown in .light) */}
+        <img src="/klcc-day.jpg" alt={SKYLINE_ALT} loading="lazy" className="dashboard-skyline dashboard-skyline--day pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover object-right" />
         <div className="dashboard-skyline-shade pointer-events-none absolute inset-0 -z-10" />
         <div className="relative max-w-2xl">
           <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium text-muted-foreground">

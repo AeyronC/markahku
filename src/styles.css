@@ -249,22 +249,42 @@
 .dashboard-welcome {
   min-height: 248px;
 }
-.dashboard-skyline {
+/* Dark-mode night skyline: visible by default */
+.dashboard-skyline--night {
   opacity: 0.6;
 }
+/* Light-mode day skyline: hidden by default */
+.dashboard-skyline--day {
+  display: none;
+}
+/* Dark-mode gradient: dark navy ➜ transparent (left-to-right) */
 .dashboard-skyline-shade {
   background: linear-gradient(90deg, var(--background) 0%, color-mix(in oklab, var(--background) 94%, transparent) 28%, color-mix(in oklab, var(--background) 48%, transparent) 58%, transparent 100%);
 }
-.light .dashboard-skyline {
-  opacity: 0.22;
+
+/* Light theme: swap images */
+.light .dashboard-skyline--night {
+  display: none;
 }
+.light .dashboard-skyline--day {
+  display: block;
+  opacity: 0.32;
+}
+/* Light-mode gradient: soft white ➜ transparent (left-to-right) */
 .light .dashboard-skyline-shade {
-  background: linear-gradient(90deg, var(--background) 0%, color-mix(in oklab, var(--background) 94%, transparent) 30%, color-mix(in oklab, var(--background) 64%, transparent) 60%, transparent 100%);
+  background: linear-gradient(90deg, var(--background) 0%, color-mix(in oklab, var(--background) 96%, transparent) 32%, color-mix(in oklab, var(--background) 68%, transparent) 58%, transparent 100%);
 }
+
 @media (max-width: 767px) {
-  .dashboard-skyline {
+  .dashboard-skyline--night,
+  .dashboard-skyline--day {
     object-position: 72% center;
+  }
+  .dashboard-skyline--night {
     opacity: 0.35;
+  }
+  .light .dashboard-skyline--day {
+    opacity: 0.22;
   }
   .dashboard-skyline-shade {
     background: linear-gradient(90deg, var(--background), color-mix(in oklab, var(--background) 80%, transparent) 45%, color-mix(in oklab, var(--background) 30%, transparent));
